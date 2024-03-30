@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import axios, { AxiosError } from "axios";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { config } from "@/lib/config";
@@ -52,7 +52,6 @@ export default function ChangePasswordForm({ session }: { session: string }) {
       confirmNewPassword: "",
     },
   });
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { executeRecaptcha } = useGoogleReCaptcha();
 
