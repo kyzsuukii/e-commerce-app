@@ -80,7 +80,7 @@ export default function LoginForm() {
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Register</CardTitle>
+        <CardTitle className="text-2xl font-bold">Login</CardTitle>
         <CardDescription>
           Enter your email and password to login
         </CardDescription>
