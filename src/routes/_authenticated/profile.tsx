@@ -31,8 +31,8 @@ async function getProfile(token: string) {
     return data;
   } catch (error: any) {
     if (error.response.status == 401) {
-      // delete session
-      // redirect
+      localStorage.clear();
+      window.location.reload();
     }
   }
 }

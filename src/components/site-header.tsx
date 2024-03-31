@@ -82,7 +82,7 @@ export default function SiteHeader() {
             variant="destructive"
             size="icon"
             onClick={async () => {
-              localStorage.removeItem("session");
+              localStorage.clear();
               router.invalidate();
               window.location.reload();
             }}

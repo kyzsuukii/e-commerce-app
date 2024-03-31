@@ -78,7 +78,7 @@ export default function ChangePasswordForm({ session }: { session: string }) {
       if (error instanceof AxiosError) {
         return toast.error(error.response?.data.errors[0].msg);
       } else if (error.response.status == 401) {
-        localStorage.removeItem("session");
+        localStorage.clear();
         window.location.reload();
       } else {
         return toast.error("An unexpected error occurred");

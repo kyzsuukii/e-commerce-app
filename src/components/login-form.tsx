@@ -65,6 +65,9 @@ export default function LoginForm() {
         }
       );
       localStorage.setItem("session", data.token);
+      if (data.isAdmin) {
+        localStorage.setItem("isAdmin", data.isAdmin);
+      }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         return toast.error(error.response?.data.errors[0].msg);
