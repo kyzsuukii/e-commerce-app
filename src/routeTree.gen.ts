@@ -23,9 +23,10 @@ import { Route as AuthenticatedCartImport } from './routes/_authenticated/cart'
 import { Route as AuthenticatedAboutImport } from './routes/_authenticated/about'
 import { Route as AuthRegisterImport } from './routes/_auth/register'
 import { Route as AuthLoginImport } from './routes/_auth/login'
-import { Route as AdminDashboardImport } from './routes/_admin/dashboard'
+import { Route as AdminDashboardIndexImport } from './routes/_admin/dashboard/index'
 import { Route as AuthenticatedProductProductIdImport } from './routes/_authenticated/product.$productId'
 import { Route as AuthenticatedCategoryCategoryNameImport } from './routes/_authenticated/category.$categoryName'
+import { Route as AdminDashboardProductsImport } from './routes/_admin/dashboard/products'
 
 // Create/Update Routes
 
@@ -90,8 +91,8 @@ const AuthLoginRoute = AuthLoginImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AdminDashboardRoute = AdminDashboardImport.update({
-  path: '/dashboard',
+const AdminDashboardIndexRoute = AdminDashboardIndexImport.update({
+  path: '/dashboard/',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -106,6 +107,11 @@ const AuthenticatedCategoryCategoryNameRoute =
     path: '/category/$categoryName',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+
+const AdminDashboardProductsRoute = AdminDashboardProductsImport.update({
+  path: '/dashboard/products',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -122,10 +128,6 @@ declare module '@tanstack/react-router' {
     '/_authenticated': {
       preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
-    }
-    '/_admin/dashboard': {
-      preLoaderRoute: typeof AdminDashboardImport
-      parentRoute: typeof AdminImport
     }
     '/_auth/login': {
       preLoaderRoute: typeof AuthLoginImport
@@ -163,6 +165,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_admin/dashboard/products': {
+      preLoaderRoute: typeof AdminDashboardProductsImport
+      parentRoute: typeof AdminImport
+    }
     '/_authenticated/category/$categoryName': {
       preLoaderRoute: typeof AuthenticatedCategoryCategoryNameImport
       parentRoute: typeof AuthenticatedImport
@@ -171,13 +177,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProductProductIdImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_admin/dashboard/': {
+      preLoaderRoute: typeof AdminDashboardIndexImport
+      parentRoute: typeof AdminImport
+    }
   }
 }
 
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  AdminRoute.addChildren([AdminDashboardRoute]),
+  AdminRoute.addChildren([
+    AdminDashboardProductsRoute,
+    AdminDashboardIndexRoute,
+  ]),
   AuthRoute.addChildren([AuthLoginRoute, AuthRegisterRoute]),
   AuthenticatedRoute.addChildren([
     AuthenticatedAboutRoute,

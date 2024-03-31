@@ -1,5 +1,10 @@
-import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  Outlet,
+  useRouterState,
+} from "@tanstack/react-router";
 import SiteHeader from "@/components/site-header";
+import DashboardHeader from "@/components/dashboard-header";
 
 type RouterContext = {
   session: string;
@@ -15,9 +20,17 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function Root() {
   const session = Route.useLoaderData();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
   return (
     <>
-      {session && <SiteHeader />}
+      {session ? (
+        pathname.includes("/dashboard") ? (
+          <DashboardHeader />
+        ) : (
+          <SiteHeader />
+        )
+      ) : null}
       <main>
         <Outlet />
       </main>
