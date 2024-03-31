@@ -1,7 +1,18 @@
 import { Link } from "@tanstack/react-router";
 import { Store } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function MainNav() {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isAdmin = localStorage.getItem("isAdmin");
+      if (isAdmin === "true") {
+        setIsAdmin(true);
+      }
+    }
+  }, [isAdmin]);
   const data = [
     {
       title: "Products",
@@ -37,6 +48,14 @@ export default function MainNav() {
             {nav.title}
           </Link>
         ))}
+        {isAdmin && (
+          <Link
+            to="/dashboard"
+            className="transition-colors text-foreground/60 hover:text-foreground/80 [&.active]:text-foreground"
+          >
+            Dashboard
+          </Link>
+        )}
       </nav>
     </div>
   );

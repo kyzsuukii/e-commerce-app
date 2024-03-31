@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -6,7 +6,17 @@ import { Menu, Store } from "lucide-react";
 import { Link, useRouter } from "@tanstack/react-router";
 
 export function MobileNav() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isAdmin = localStorage.getItem("isAdmin");
+      if (isAdmin === "true") {
+        setIsAdmin(true);
+      }
+    }
+  }, [isAdmin]);
 
   const data = [
     {
@@ -54,6 +64,11 @@ export function MobileNav() {
                 {nav.title}
               </MobileLink>
             ))}
+            {isAdmin && (
+              <MobileLink to="/dashboard" onOpenChange={setOpen}>
+                Dashboard
+              </MobileLink>
+            )}
           </div>
         </div>
       </SheetContent>

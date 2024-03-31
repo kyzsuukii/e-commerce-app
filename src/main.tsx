@@ -15,6 +15,7 @@ const router = createRouter({
   routeTree,
   context: {
     session: undefined!,
+    isAdmin: undefined!,
   },
 });
 
@@ -26,6 +27,7 @@ declare module "@tanstack/react-router" {
 
 const queryClient = new QueryClient();
 const session = localStorage.getItem("session") || undefined;
+const isAdmin = localStorage.getItem("isAdmin") || undefined;
 
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
@@ -36,7 +38,7 @@ if (!rootElement.innerHTML) {
         <CartProvider>
           <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
             <GoogleReCaptchaProvider reCaptchaKey={config.RECAPTHA_SITE_KEY}>
-              <RouterProvider router={router} context={{ session }} />
+              <RouterProvider router={router} context={{ session, isAdmin }} />
             </GoogleReCaptchaProvider>
           </ThemeProvider>
         </CartProvider>
