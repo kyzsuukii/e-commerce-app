@@ -5,7 +5,6 @@ import Detail from "@/components/Detail";
 import axios from "axios";
 
 export const Route = createFileRoute("/_authenticated/product/$productId")({
-  loader: ({ params: { productId } }) => productId,
   component: ProductDetail,
 });
 
@@ -19,7 +18,7 @@ async function getProduct(id: string) {
 }
 
 function ProductDetail() {
-  const productId = Route.useLoaderData();
+  const { productId } = Route.useParams();
 
   const { data, isLoading } = useQuery({
     queryKey: ["product", productId],
