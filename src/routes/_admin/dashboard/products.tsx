@@ -18,15 +18,20 @@ export const Route = createFileRoute("/_admin/dashboard/products")({
   component: DashboardProduct,
 });
 
-async function getAllProduct() {
-  const { data } = await axios.get(`${config.SERVER_API_URL}/v1/product/all`);
+async function getAllProduct(session: string) {
+  const { data } = await axios.get(`${config.SERVER_API_URL}/v1/product/all`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
   return data;
 }
 
 function DashboardProduct() {
+  const { session } = Route.useRouteContext();
   const { data, isLoading } = useQuery({
     queryKey: ["product"],
-    queryFn: getAllProduct,
+    queryFn: () => getAllProduct(session),
   });
 
   if (isLoading) return <Loading />;
