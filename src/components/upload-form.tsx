@@ -42,6 +42,7 @@ const ACCEPTED_IMAGE_TYPES = [
 ];
 
 export const formSchema = z.object({
+  title: z.string(),
   productImages: z
     .custom<FileList>()
     .refine((file) => file?.length == 1, {
@@ -119,10 +120,25 @@ export default function ProductUploadForm({ session }: { session: string }) {
               <div>
                 <FormField
                   control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Product title" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div>
+                <FormField
+                  control={form.control}
                   name="productImages"
                   render={() => (
                     <FormItem>
-                      <FormLabel>Price</FormLabel>
+                      <FormLabel>Thumbnail</FormLabel>
                       <FormControl>
                         <Input
                           type="file"
@@ -217,7 +233,7 @@ export default function ProductUploadForm({ session }: { session: string }) {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
-                        className="h-[300px]"
+                        className="h-[400px]"
                         placeholder="Product description"
                         {...field}
                       />
