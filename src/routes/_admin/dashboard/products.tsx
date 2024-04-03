@@ -67,7 +67,16 @@ function DashboardProduct() {
               </div>
             </CardContent>
             <CardFooter className="gap-4 flex-wrap">
-              <Button variant="outline">More Info</Button>
+              <Button variant="outline" asChild>
+                <Link
+                  to="/dashboard/product/$productId"
+                  params={{
+                    productId: product.id,
+                  }}
+                >
+                  More Info
+                </Link>
+              </Button>
             </CardFooter>
           </Card>
         ))}
