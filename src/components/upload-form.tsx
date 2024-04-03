@@ -42,8 +42,12 @@ const ACCEPTED_IMAGE_TYPES = [
 ];
 
 export const formSchema = z.object({
-  title: z.string(),
-  productImages: z
+  name: z.string(),
+  category: z.string(),
+  description: z.string(),
+  price: z.string(),
+  stock: z.string(),
+  thumbnail: z
     .custom<FileList>()
     .refine((file) => file?.length == 1, {
       message: "Image is required",
@@ -54,10 +58,6 @@ export const formSchema = z.object({
     .refine((file) => file?.[0]?.size <= MAX_FILE_SIZE, {
       message: "File size must be less than or equal to 2Mb",
     }),
-  category: z.string(),
-  description: z.string(),
-  price: z.string(),
-  stock: z.string(),
 });
 
 const Spinner = () => (
@@ -75,10 +75,10 @@ export default function ProductUploadForm({ session }: { session: string }) {
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { productImages, ...rest } = values;
+    const { thumbnail, ...rest } = values;
     const formData = {
       ...rest,
-      productImages: productImages?.[0],
+      thumbnail: thumbnail?.[0],
     };
     try {
       setLoading(true);
@@ -120,10 +120,10 @@ export default function ProductUploadForm({ session }: { session: string }) {
               <div>
                 <FormField
                   control={form.control}
-                  name="title"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Title</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
                         <Input placeholder="Product title" {...field} />
                       </FormControl>
@@ -135,15 +135,12 @@ export default function ProductUploadForm({ session }: { session: string }) {
               <div>
                 <FormField
                   control={form.control}
-                  name="productImages"
+                  name="thumbnail"
                   render={() => (
                     <FormItem>
                       <FormLabel>Thumbnail</FormLabel>
                       <FormControl>
-                        <Input
-                          type="file"
-                          {...form.register("productImages")}
-                        />
+                        <Input type="file" {...form.register("thumbnail")} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

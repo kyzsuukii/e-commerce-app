@@ -36,6 +36,8 @@ function DashboardProduct() {
 
   if (isLoading) return <Loading />;
 
+  console.log(data);
+
   return (
     <div className="my-12 container mx-auto">
       <div className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -50,7 +52,7 @@ function DashboardProduct() {
         {data.map((product: any) => (
           <Card key={product.id}>
             <CardHeader>
-              <CardTitle className="truncate">{product.title}</CardTitle>
+              <CardTitle className="truncate">{product.name}</CardTitle>
               <CardDescription className="truncate">
                 {product.description}
               </CardDescription>
@@ -59,7 +61,7 @@ function DashboardProduct() {
               <div className="aspect-w-16 aspect-h-12 object-cover">
                 <LazyLoadImage
                   className="rounded"
-                  src={`${config.SERVER_API_URL}/${product.image_path}`}
+                  src={`${config.SERVER_API_URL}/${product.thumbnail}`}
                   alt={product.title}
                 />
               </div>
