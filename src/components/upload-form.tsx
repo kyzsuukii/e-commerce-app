@@ -68,6 +68,7 @@ export default function ProductUploadForm({ session }: { session: string }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       price: "0",
       stock: "1",
     },
@@ -91,16 +92,13 @@ export default function ProductUploadForm({ session }: { session: string }) {
     } catch (error: any) {
       if (error instanceof AxiosError) {
         return toast.error(error.response?.data.errors[0].msg);
-      } else if (error.response.status == 401) {
-        localStorage.clear();
-        window.location.reload();
       } else {
         return toast.error("An unexpected error occurred");
       }
     } finally {
       setLoading(false);
     }
-    toast.success("Upload successfully");
+    return toast.success("Upload successfully");
   }
 
   return (

@@ -13,30 +13,38 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import Error from "@/components/error.tsx";
 
 export const Route = createFileRoute("/_admin/dashboard/products")({
   component: DashboardProduct,
 });
 
 async function getAllProduct(session: string) {
-  const { data } = await axios.get(`${config.SERVER_API_URL}/v1/product/all`, {
-    headers: {
-      Authorization: `Bearer ${session}`,
-    },
-  });
-  return data;
+  try {
+    const { data } = await axios.get(
+      `${config.SERVER_API_URL}/v1/product/all`,
+      {
+        headers: {
+          Authorization: `Bearer ${session}`,
+        },
+      },
+    );
+    return data;
+  } catch (error: unknown) {
+    throw error;
+  }
 }
 
 function DashboardProduct() {
   const { session } = Route.useRouteContext();
-  const { data, isLoading } = useQuery({
+  const { data, error, isLoading, isError } = useQuery({
     queryKey: ["product"],
     queryFn: () => getAllProduct(session),
   });
 
   if (isLoading) return <Loading />;
 
-  console.log(data);
+  if (isError) return <Error error={error} />;
 
   return (
     <div className="my-12 container mx-auto">

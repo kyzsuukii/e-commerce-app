@@ -36,7 +36,7 @@ export const formSchema = z
     {
       message: "Passwords do not match",
       path: ["confirmPassword"],
-    }
+    },
   );
 
 const Spinner = () => (
@@ -72,7 +72,7 @@ export default function ChangePasswordForm({ session }: { session: string }) {
           headers: {
             Authorization: `Bearer ${session}`,
           },
-        }
+        },
       );
     } catch (error: any) {
       if (error instanceof AxiosError) {
@@ -86,7 +86,7 @@ export default function ChangePasswordForm({ session }: { session: string }) {
     } finally {
       setLoading(false);
     }
-    toast.success("Password changed successfully");
+    return toast.success("Password changed successfully");
   }
 
   return (

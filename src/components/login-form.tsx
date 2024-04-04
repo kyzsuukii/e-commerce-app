@@ -62,7 +62,7 @@ export default function LoginForm() {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
       localStorage.setItem("session", data.token);
       if (data.isAdmin) {
