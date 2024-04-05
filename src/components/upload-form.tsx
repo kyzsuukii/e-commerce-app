@@ -26,12 +26,12 @@ import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { config } from "@/lib/config";
 import { Textarea } from "./ui/textarea";
+import useSWRMutation from "swr/mutation";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = [
@@ -60,11 +60,40 @@ export const formSchema = z.object({
     }),
 });
 
+async function uploadProduct([url, session]: any, { arg }: { arg: any }) {
+  try {
+    const { status, data } = await axios.post(
+      `${config.SERVER_API_URL}/v1/${url}`,
+      arg,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${session}`,
+        },
+      },
+    );
+    if (status === 200) {
+      return toast.success(data.msg);
+    }
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      return toast.error(error.response?.data.errors[0].msg);
+    } else {
+      return toast.error("An unexpected error occurred");
+    }
+  }
+}
+
 const Spinner = () => (
   <div className="border-background h-5 w-5 animate-spin rounded-full border-2 border-t-blue-600" />
 );
 
 export default function ProductUploadForm({ session }: { session: string }) {
+  const { trigger, isMutating } = useSWRMutation(
+    ["product/upload", session],
+    uploadProduct,
+  );
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -73,32 +102,14 @@ export default function ProductUploadForm({ session }: { session: string }) {
       stock: "1",
     },
   });
-  const [loading, setLoading] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { thumbnail, ...rest } = values;
-    const formData = {
+    const data = {
       ...rest,
       thumbnail: thumbnail?.[0],
     };
-    try {
-      setLoading(true);
-      await axios.post(`${config.SERVER_API_URL}/v1/product/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${session}`,
-        },
-      });
-    } catch (error: any) {
-      if (error instanceof AxiosError) {
-        return toast.error(error.response?.data.errors[0].msg);
-      } else {
-        return toast.error("An unexpected error occurred");
-      }
-    } finally {
-      setLoading(false);
-    }
-    return toast.success("Upload successfully");
+    trigger(data);
   }
 
   return (
@@ -240,11 +251,11 @@ export default function ProductUploadForm({ session }: { session: string }) {
             </div>
             <div className="mt-6">
               <Button
-                disabled={loading}
+                disabled={isMutating}
                 type="submit"
                 className="disabled:opacity-75 disabled:cursor-not-allowed"
               >
-                {loading ? <Spinner /> : "Upload"}
+                {isMutating ? <Spinner /> : "Upload"}
               </Button>
             </div>
           </form>

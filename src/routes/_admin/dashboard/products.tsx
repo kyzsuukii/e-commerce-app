@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { config } from "@/lib/config.ts";
 import Loading from "@/components/loading.tsx";
@@ -13,13 +12,15 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Info, SquarePen, Trash } from "lucide-react";
+import useSWR from "swr";
 
 export const Route = createFileRoute("/_admin/dashboard/products")({
   component: DashboardProduct,
 });
 
-async function getAllProduct(session: string) {
-  const { data } = await axios.get(`${config.SERVER_API_URL}/v1/product/all`, {
+async function getAllProduct(url: string, session: string) {
+  const { data } = await axios.get(`${config.SERVER_API_URL}/v1/${url}`, {
     headers: {
       Authorization: `Bearer ${session}`,
     },
@@ -27,12 +28,24 @@ async function getAllProduct(session: string) {
   return data;
 }
 
+async function deleteProduct(id: string, session: string) {
+  await axios.delete(`${config.SERVER_API_URL}/v1/product/delete`, {
+    data: {
+      id,
+    },
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  window.location.reload();
+}
+
 function DashboardProduct() {
   const { session } = Route.useRouteContext();
-  const { data, isLoading } = useQuery({
-    queryKey: ["product"],
-    queryFn: () => getAllProduct(session),
-  });
+  const { data, isLoading } = useSWR(
+    ["product/all", session],
+    ([url, session]) => getAllProduct(url, session),
+  );
 
   if (isLoading) return <Loading />;
 
@@ -46,7 +59,7 @@ function DashboardProduct() {
           <Link to="/dashboard/upload">Add Product</Link>
         </Button>
       </div>
-      {data ? (
+      {data[0] ? (
         <div className="my-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {data.map((product: any) => (
             <Card key={product.id}>
@@ -66,15 +79,27 @@ function DashboardProduct() {
                 </div>
               </CardContent>
               <CardFooter className="gap-4 flex-wrap">
-                <Button variant="outline" asChild>
+                <Button variant="secondary" size="icon" asChild>
                   <Link
                     to="/dashboard/product/$productId"
                     params={{
                       productId: product.id,
                     }}
                   >
-                    More Info
+                    <Info />
                   </Link>
+                </Button>
+                <Button variant="secondary" size="icon">
+                  <SquarePen />
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={async () => {
+                    await deleteProduct(product.id, session);
+                  }}
+                >
+                  <Trash />
                 </Button>
               </CardFooter>
             </Card>
