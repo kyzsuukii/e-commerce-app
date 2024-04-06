@@ -5,9 +5,8 @@ import Loading from "@/components/loading.tsx";
 import useSWR from "swr";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { FaDollarSign } from "react-icons/fa6";
-import { Box, SquarePen, Trash } from "lucide-react";
+import { Box } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner.tsx";
-import { Button } from "@/components/ui/button.tsx";
 
 export const Route = createFileRoute("/_admin/dashboard/product/$productId")({
   component: ProductDetails,
@@ -69,14 +68,6 @@ function ProductDetails() {
               </span>
             </li>
           </ul>
-          <div className="flex items-center gap-4">
-            <Button variant="secondary" size="icon">
-              <SquarePen />
-            </Button>
-            <Button variant="destructive" size="icon">
-              <Trash />
-            </Button>
-          </div>
         </div>
       </div>
       <Toaster />
