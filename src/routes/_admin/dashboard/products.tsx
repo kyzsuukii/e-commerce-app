@@ -100,8 +100,15 @@ function DashboardProduct() {
                     <Info />
                   </Link>
                 </Button>
-                <Button variant="secondary" size="icon">
-                  <SquarePen />
+                <Button variant="secondary" size="icon" asChild>
+                  <Link
+                    to="/dashboard/update/$productId/"
+                    params={{
+                      productId: product.id,
+                    }}
+                  >
+                    <SquarePen />
+                  </Link>
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
