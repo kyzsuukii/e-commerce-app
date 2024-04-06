@@ -64,6 +64,10 @@ async function updateProduct([url, session]: any, { arg }: { arg: any }) {
     }
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
+      if (error.response?.status == 401) {
+        localStorage.clear();
+        window.location.reload();
+      }
       return toast.error(error.response?.data.errors[0].msg);
     } else {
       return toast.error("An unexpected error occurred");
