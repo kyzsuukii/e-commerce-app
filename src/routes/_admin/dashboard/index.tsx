@@ -13,16 +13,16 @@ export const Route = createFileRoute("/_admin/dashboard/")({
 
 function Dashboard() {
   return (
-    <div className="my-12 container mx-auto">
-      <div className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+    <div className="my-12 container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mb-8 text-4xl font-extrabold tracking-tight lg:text-5xl">
         Admin Dashboard
       </div>
-      <div className="mt-12 border p-2 rounded grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <Link to="/dashboard/products">
-          <Card>
+          <Card className="hover:scale-105 transition-transform duration-200">
             <CardHeader>
               <div className="flex items-center space-x-4">
-                <Store strokeWidth={1} size={54} />
+                <Store strokeWidth={1} size={54} className="text-gray-500" />
                 <div>
                   <CardTitle>Products</CardTitle>
                   <CardDescription>Manage product in database</CardDescription>
@@ -31,17 +31,19 @@ function Dashboard() {
             </CardHeader>
           </Card>
         </Link>
-        <Card className="hover:cursor-not-allowed">
-          <CardHeader>
-            <div className="flex items-center space-x-4">
-              <User strokeWidth={1} size={54} />
-              <div>
-                <CardTitle>User Role</CardTitle>
-                <CardDescription>Manage user role</CardDescription>
+        <div>
+          <Card className="cursor-not-allowed hover:scale-105 transition-transform duration-200">
+            <CardHeader>
+              <div className="flex items-center space-x-4">
+                <User strokeWidth={1} size={54} className="text-gray-500" />
+                <div>
+                  <CardTitle>Users</CardTitle>
+                  <CardDescription className="truncate">Manage user roles and access</CardDescription>
+                </div>
               </div>
-            </div>
-          </CardHeader>
-        </Card>
+            </CardHeader>
+          </Card>
+        </div>
       </div>
     </div>
   );

@@ -42,7 +42,6 @@ export const formSchema = z.object({
   stock: z.string(),
 });
 
-
 async function updateProduct([url, session]: any, { arg }: { arg: any }) {
   try {
     const { status, data } = await axios.put(
@@ -52,7 +51,7 @@ async function updateProduct([url, session]: any, { arg }: { arg: any }) {
         headers: {
           Authorization: `Bearer ${session}`,
         },
-      },
+      }
     );
     if (status === 200) {
       return toast.success(data.msg, {
@@ -79,11 +78,16 @@ const Spinner = () => (
   <div className="border-background h-5 w-5 animate-spin rounded-full border-2 border-t-blue-600" />
 );
 
-export default function ProductUpdateForm({ data, session }: { data: any; session: string }) {
-  
+export default function ProductUpdateForm({
+  data,
+  session,
+}: {
+  data: any;
+  session: string;
+}) {
   const { trigger, isMutating } = useSWRMutation(
     ["product/update", session],
-    updateProduct,
+    updateProduct
   );
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -103,70 +107,68 @@ export default function ProductUpdateForm({ data, session }: { data: any; sessio
   }
 
   return (
-    <Card className="mx-auto">
+    <Card className="mx-auto max-w-xl">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Upload Product</CardTitle>
-        <CardDescription>Upload your product to database here</CardDescription>
+        <CardDescription>
+          Upload your product to the database here.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form
             encType="multipart/form-data"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            className="grid grid-cols-1 gap-6"
           >
-            <div className="md:max-w-md flex flex-col gap-4 justify-center">
-              <div>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
+            <div className="flex flex-col gap-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Product title" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <Input placeholder="Product title" {...field} />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div>
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Product Category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Category</SelectLabel>
-                            <SelectItem value="smartphones">
-                              smartphones
-                            </SelectItem>
-                            <SelectItem value="laptops">laptops</SelectItem>
-                            <SelectItem value="furniture">furniture</SelectItem>
-                            <SelectItem value="groceries">groceries</SelectItem>
-                            <SelectItem value="shirts">shirts</SelectItem>
-                            <SelectItem value="others">others</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Categories</SelectLabel>
+                          <SelectItem value="smartphones">
+                            smartphones
+                          </SelectItem>
+                          <SelectItem value="laptops">laptops</SelectItem>
+                          <SelectItem value="furniture">furniture</SelectItem>
+                          <SelectItem value="groceries">groceries</SelectItem>
+                          <SelectItem value="shirts">shirts</SelectItem>
+                          <SelectItem value="others">others</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
                   name="price"
@@ -184,8 +186,6 @@ export default function ProductUpdateForm({ data, session }: { data: any; sessio
                     </FormItem>
                   )}
                 />
-              </div>
-              <div>
                 <FormField
                   control={form.control}
                   name="stock"
@@ -195,7 +195,7 @@ export default function ProductUpdateForm({ data, session }: { data: any; sessio
                       <FormControl>
                         <Input
                           type="number"
-                          placeholder="Product Stock"
+                          placeholder="Product stock"
                           {...field}
                         />
                       </FormControl>
@@ -204,8 +204,6 @@ export default function ProductUpdateForm({ data, session }: { data: any; sessio
                   )}
                 />
               </div>
-            </div>
-            <div>
               <FormField
                 control={form.control}
                 name="description"
@@ -213,26 +211,20 @@ export default function ProductUpdateForm({ data, session }: { data: any; sessio
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea
-                        className="h-[400px]"
-                        placeholder="Product description"
-                        {...field}
-                      />
+                      <Textarea placeholder="Product description" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <div className="mt-6">
-              <Button
-                disabled={isMutating}
-                type="submit"
-                className="disabled:opacity-75 disabled:cursor-not-allowed"
-              >
-                {isMutating ? <Spinner /> : "Upload"}
-              </Button>
-            </div>
+            <Button
+              disabled={isMutating}
+              type="submit"
+              className="w-full md:w-auto disabled:opacity-75 disabled:cursor-not-allowed"
+            >
+              {isMutating ? <Spinner /> : "Update"}
+            </Button>
           </form>
         </Form>
       </CardContent>

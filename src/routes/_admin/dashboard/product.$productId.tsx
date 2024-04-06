@@ -55,12 +55,6 @@ function ProductDetails() {
                 <span>{data.price}</span>
               </span>
             </li>
-            {/*<li>*/}
-            {/*<span className="inline-flex items-center gap-1 text-yellow-500">*/}
-            {/*  <FaStar />*/}
-            {/*  <span>{data.rating}</span>*/}
-            {/*</span>*/}
-            {/*</li>*/}
             <li>
               <span className="inline-flex items-center gap-1">
                 <Box />

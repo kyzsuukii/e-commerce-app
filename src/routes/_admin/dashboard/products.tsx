@@ -55,7 +55,7 @@ function DashboardProduct() {
   const { session } = Route.useRouteContext();
   const { data, isLoading } = useSWR(
     ["product/all", session],
-    ([url, session]) => getAllProduct(url, session),
+    ([url, session]) => getAllProduct(url, session)
   );
 
   if (isLoading) return <Loading />;
@@ -73,21 +73,24 @@ function DashboardProduct() {
       {data[0] ? (
         <div className="my-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {data.map((product: any) => (
-            <Card key={product.id}>
+            <Card
+              key={product.id}
+              className="hover:scale-105 transition-transform duration-200"
+            >
               <CardHeader>
-                <CardTitle className="truncate">{product.name}</CardTitle>
-                <CardDescription className="truncate">
-                  {product.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
                 <div className="aspect-w-16 aspect-h-12 object-cover">
                   <LazyLoadImage
-                    className="rounded"
+                    className="rounded-sm"
                     src={`${config.SERVER_API_URL}/${product.thumbnail}`}
                     alt={product.title}
                   />
                 </div>
+              </CardHeader>
+              <CardContent>
+                <CardTitle className="truncate">{product.name}</CardTitle>
+                <CardDescription className="truncate">
+                  {product.description}
+                </CardDescription>
               </CardContent>
               <CardFooter className="gap-4 flex-wrap">
                 <Button variant="secondary" size="icon" asChild>
@@ -97,7 +100,7 @@ function DashboardProduct() {
                       productId: product.id,
                     }}
                   >
-                    <Info />
+                    <Info size={18} />
                   </Link>
                 </Button>
                 <Button variant="secondary" size="icon" asChild>
@@ -107,13 +110,13 @@ function DashboardProduct() {
                       productId: product.id,
                     }}
                   >
-                    <SquarePen />
+                    <SquarePen size={18} />
                   </Link>
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" size="icon">
-                      <Trash />
+                      <Trash size={18} />
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
