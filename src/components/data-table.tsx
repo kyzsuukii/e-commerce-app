@@ -34,9 +34,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import axios from "axios";
+import { config } from "@/lib/config";
 
 interface DataTableProps<TData> {
   data: TData[]
+}
+
+async function deleteUser(id: number) {
+  await axios.delete(`${config.SERVER_API_URL}/v1/user/delete`, {
+    data: {
+      id
+    },
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("session")}`,
+    }
+  });
+  window.location.reload();
 }
 
 const columns: ColumnDef<any>[] = [
@@ -74,9 +88,7 @@ const columns: ColumnDef<any>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: (/* { row } */ ) => {
-      // const users = row.original;
-
+    cell: ({ row } ) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -91,7 +103,7 @@ const columns: ColumnDef<any>[] = [
             <DropdownMenuItem>CUSTOMER</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem><span className="text-red-600">Delete</span></DropdownMenuItem>
+            <DropdownMenuItem onClick={() => deleteUser(row.original.id)}><span className="text-red-600">Delete</span></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
