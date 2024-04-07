@@ -1,5 +1,6 @@
 import { DataTable } from "@/components/data-table";
 import Loading from "@/components/loading";
+import { Toaster } from "@/components/ui/sonner";
 import { config } from "@/lib/config";
 import { createFileRoute } from "@tanstack/react-router";
 import axios from "axios";
@@ -29,6 +30,7 @@ function Users() {
   return (
     <div className="my-12 container mx-auto">
       <DataTable data={data} />
+      <Toaster />
     </div>
   );
 }

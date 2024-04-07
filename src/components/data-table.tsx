@@ -34,39 +34,81 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { config } from "@/lib/config";
+import { toast } from "sonner";
 
 interface DataTableProps<TData> {
   data: TData[];
 }
 
 async function updateRole(id: number, role: string) {
-  await axios.patch(
-    `${config.SERVER_API_URL}/v1/user/role`,
-    {
-      id,
-      role,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("session")}`,
+  try {
+    const { data, status } = await axios.patch(
+      `${config.SERVER_API_URL}/v1/user/role`,
+      {
+        id,
+        role,
       },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("session")}`,
+        },
+      }
+    );
+    if (status === 200) {
+      return toast.success(data.msg, {
+        action: {
+          label: "refresh",
+          onClick: () => window.location.reload(),
+        },
+      });
     }
-  );
-  window.location.reload();
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      if (error.response?.status == 401) {
+        localStorage.clear();
+        window.location.reload();
+      }
+      return toast.error(error.response?.data.errors[0].msg);
+    } else {
+      return toast.error("An unexpected error occurred");
+    }
+  }
 }
 
 async function deleteUser(id: number) {
-  await axios.delete(`${config.SERVER_API_URL}/v1/user/delete`, {
-    data: {
-      id,
-    },
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("session")}`,
-    },
-  });
-  window.location.reload();
+  try {
+    const { status, data } = await axios.delete(
+      `${config.SERVER_API_URL}/v1/user/delete`,
+      {
+        data: {
+          id,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("session")}`,
+        },
+      }
+    );
+    if (status === 200) {
+      return toast.success(data.msg, {
+        action: {
+          label: "refresh",
+          onClick: () => window.location.reload(),
+        },
+      });
+    }
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      if (error.response?.status == 401) {
+        localStorage.clear();
+        window.location.reload();
+      }
+      return toast.error(error.response?.data.errors[0].msg);
+    } else {
+      return toast.error("An unexpected error occurred");
+    }
+  }
 }
 
 const columns: ColumnDef<any>[] = [
