@@ -32,17 +32,19 @@ function Dashboard() {
           </Card>
         </Link>
         <div>
-          <Card className="cursor-not-allowed hover:scale-105 transition-transform duration-200">
-            <CardHeader>
-              <div className="flex items-center space-x-4">
-                <User strokeWidth={1} size={54} className="text-gray-500" />
-                <div>
-                  <CardTitle>Users</CardTitle>
-                  <CardDescription className="truncate">Manage user roles and access</CardDescription>
+         <Link to="/dashboard/users">
+            <Card className="hover:scale-105 transition-transform duration-200">
+              <CardHeader>
+                <div className="flex items-center space-x-4">
+                  <User strokeWidth={1} size={54} className="text-gray-500" />
+                  <div>
+                    <CardTitle>Users</CardTitle>
+                    <CardDescription className="truncate">Manage user roles and access</CardDescription>
+                  </div>
                 </div>
-              </div>
-            </CardHeader>
-          </Card>
+              </CardHeader>
+            </Card>
+         </Link>
         </div>
       </div>
     </div>

@@ -24,6 +24,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tanstack/react-query": "^5.28.4",
     "@tanstack/react-router": "^1.20.4",
+    "@tanstack/react-table": "^8.15.3",
     "@tanstack/router-devtools": "^1.20.4",
     "@tanstack/router-vite-plugin": "^1.20.2",
     "@types/react-lazy-load-image-component": "^1.6.3",
