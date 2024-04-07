@@ -38,17 +38,33 @@ import axios from "axios";
 import { config } from "@/lib/config";
 
 interface DataTableProps<TData> {
-  data: TData[]
+  data: TData[];
+}
+
+async function updateRole(id: number, role: string) {
+  await axios.patch(
+    `${config.SERVER_API_URL}/v1/user/role`,
+    {
+      id,
+      role,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("session")}`,
+      },
+    }
+  );
+  window.location.reload();
 }
 
 async function deleteUser(id: number) {
   await axios.delete(`${config.SERVER_API_URL}/v1/user/delete`, {
     data: {
-      id
+      id,
     },
     headers: {
       Authorization: `Bearer ${localStorage.getItem("session")}`,
-    }
+    },
   });
   window.location.reload();
 }
@@ -57,9 +73,7 @@ const columns: ColumnDef<any>[] = [
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("id")}</div>
-    ),
+    cell: ({ row }) => <div className="font-medium">{row.getValue("id")}</div>,
   },
   {
     accessorKey: "email",
@@ -80,15 +94,13 @@ const columns: ColumnDef<any>[] = [
     accessorKey: "role",
     header: () => <div className="text-right">Role</div>,
     cell: ({ row }) => {
-      return (
-        <div className="font-bold">{row.getValue("role")}</div>
-      );
+      return <div className="font-bold">{row.getValue("role")}</div>;
     },
   },
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row } ) => {
+    cell: ({ row }) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -99,11 +111,21 @@ const columns: ColumnDef<any>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Role</DropdownMenuLabel>
-            <DropdownMenuItem>ADMIN</DropdownMenuItem>
-            <DropdownMenuItem>CUSTOMER</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => updateRole(row.original.id, "ADMIN")}
+            >
+              ADMIN
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => updateRole(row.original.id, "CUSTOMER")}
+            >
+              CUSTOMER
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => deleteUser(row.original.id)}><span className="text-red-600">Delete</span></DropdownMenuItem>
+            <DropdownMenuItem onClick={() => deleteUser(row.original.id)}>
+              <span className="text-red-600">Delete</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
