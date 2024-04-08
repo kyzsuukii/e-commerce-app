@@ -143,6 +143,7 @@ const columns: ColumnDef<any>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const user = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -152,20 +153,23 @@ const columns: ColumnDef<any>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Role</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => updateRole(row.original.id, "ADMIN")}
-            >
-              ADMIN
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => updateRole(row.original.id, "CUSTOMER")}
-            >
-              CUSTOMER
-            </DropdownMenuItem>
+            <DropdownMenuLabel>Change Role</DropdownMenuLabel>
+            {user.role !== "ADMIN" ? (
+              <DropdownMenuItem
+                onClick={() => updateRole(user.id, "ADMIN")}
+              >
+                ADMIN
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem
+                onClick={() => updateRole(user.id, "CUSTOMER")}
+              >
+                CUSTOMER
+              </DropdownMenuItem>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => deleteUser(row.original.id)}>
+            <DropdownMenuItem onClick={() => deleteUser(user.id)}>
               <span className="text-red-600">Delete</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
