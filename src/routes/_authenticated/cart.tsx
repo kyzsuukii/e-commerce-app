@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input";
+import { config } from "@/lib/config";
 import { createFileRoute } from "@tanstack/react-router";
 import { FaDollarSign } from "react-icons/fa6";
 import { FiMinus, FiPlus, FiTrash } from "react-icons/fi";
@@ -31,13 +32,13 @@ function Cart() {
                 {/* image */}
                 <div className="aspect-h-10 aspect-w-7">
                   <img
-                    src={item.thumbnail}
-                    alt={item.title}
+                    src={`${config.SERVER_API_URL}/${item.thumbnail}`}
+                    alt={item.name}
                     className="object-cover rounded-md"
                   />
                 </div>
                 <div className="truncate">
-                  <div className="font-bold">{item.title}</div>
+                  <div className="font-bold">{item.name}</div>
                   <div className="text-primary text-sm">{item.description}</div>
                   {item.quantity > item.stock && (
                     <div className="text-red-600 text-sm">

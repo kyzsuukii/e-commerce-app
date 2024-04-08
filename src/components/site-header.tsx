@@ -16,6 +16,7 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { ModeToggle } from "./mode-toggle";
 import { MobileNav } from "./mobile-nav";
 import { CircleUser, LogOut } from "lucide-react";
+import { config } from "@/lib/config";
 
 export default function SiteHeader() {
   const [open, setOpen] = React.useState(false);
@@ -53,12 +54,12 @@ export default function SiteHeader() {
                       <div className="flex items-center space-x-2 my-4 mr-4">
                         <img
                           className="h-12 w-12 object-cover rounded"
-                          src={item.thumbnail}
-                          alt={item.title}
+                          src={`${config.SERVER_API_URL}/${item.thumbnail}`}
+                          alt={item.name}
                         />
                         <div>
                           <div>
-                            <div className="font-semibold">{item.title}</div>
+                            <div className="font-semibold">{item.name}</div>
                             <div className="text-sm text-muted-foreground/80">
                               Quantity: {item.quantity}
                             </div>
