@@ -1,18 +1,11 @@
 import { useCart } from "react-use-cart";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { BiCart } from "react-icons/bi";
-import { FaDollarSign, FaStar } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Box } from "lucide-react";
+import { Box, DollarSign } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { config } from "@/lib/config";
 
 export default function Detail({ product }: any) {
   const { addItem, removeItem } = useCart();
@@ -20,25 +13,15 @@ export default function Detail({ product }: any) {
   return (
     <>
       <div className="grid items-center gap-6 xl:grid-cols-2 mb-8 mx-10">
-        <Carousel className="w-full max-w-md border rounded">
-          <CarouselContent>
-            {product.images.map((image: any, index: number) => (
-              <CarouselItem key={index}>
-                <div className="aspect-w-16 aspect-h-12">
-                  <LazyLoadImage
-                    className="rounded-md object-fill"
-                    src={image}
-                  />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+        <div className="max-w-md aspect-w-16 aspect-h-9">
+          <LazyLoadImage
+            className="rounded-md object-fill"
+            src={`${config.SERVER_API_URL}/${product.thumbnail}`}
+          />
+        </div>
         <div>
           <h1 className="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">
-            {product.title}
+            {product.name}
           </h1>
           <blockquote className="mt-6 border-l-2 pl-6 italic">
             {product.description}
@@ -46,19 +29,13 @@ export default function Detail({ product }: any) {
           <ul className="my-6 ml-6 [&>li]:mt-2 font-semibold flex items-center gap-6">
             <li>
               <span className="inline-flex items-center gap-1">
-                <FaDollarSign />
+                <DollarSign size={16} />
                 <span>{product.price}</span>
               </span>
             </li>
             <li>
-              <span className="inline-flex items-center gap-1 text-yellow-500">
-                <FaStar />
-                <span>{product.rating}</span>
-              </span>
-            </li>
-            <li>
               <span className="inline-flex items-center gap-1">
-                <Box />
+                <Box size={16} />
                 <span>{product.stock}</span>
               </span>
             </li>
