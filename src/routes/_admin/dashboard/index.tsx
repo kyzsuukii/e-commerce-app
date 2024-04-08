@@ -5,7 +5,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Store, User } from "lucide-react";
+import { Box, Store, User } from "lucide-react";
 
 export const Route = createFileRoute("/_admin/dashboard/")({
   component: Dashboard,
@@ -32,19 +32,38 @@ function Dashboard() {
           </Card>
         </Link>
         <div>
-         <Link to="/dashboard/users">
+          <Link to="/dashboard/users">
             <Card className="hover:scale-105 transition-transform duration-200">
               <CardHeader>
                 <div className="flex items-center space-x-4">
                   <User strokeWidth={1} size={54} className="text-gray-500" />
                   <div>
                     <CardTitle>Users</CardTitle>
-                    <CardDescription className="truncate">Manage user roles and access</CardDescription>
+                    <CardDescription className="truncate">
+                      Manage user roles and access
+                    </CardDescription>
                   </div>
                 </div>
               </CardHeader>
             </Card>
-         </Link>
+          </Link>
+        </div>
+        <div>
+          {/* <Link to="/dashboard/users"> */}
+          <Card className="cursor-not-allowed hover:scale-105 transition-transform duration-200">
+            <CardHeader>
+              <div className="flex items-center space-x-4">
+                <Box strokeWidth={1} size={54} className="text-gray-500" />
+                <div>
+                  <CardTitle>Order</CardTitle>
+                  <CardDescription className="truncate">
+                    Manage Order
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+          {/* </Link> */}
         </div>
       </div>
     </div>
