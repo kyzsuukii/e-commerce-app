@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Loading from "@/components/loading";
-import { useQuery } from "@tanstack/react-query";
 import Detail from "@/components/Detail";
 import axios from "axios";
 import { config } from "@/lib/config";
