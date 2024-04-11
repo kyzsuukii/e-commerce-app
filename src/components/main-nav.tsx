@@ -27,6 +27,10 @@ export default function MainNav() {
       to: "/cart",
     },
     {
+      title: "Order",
+      to: "/order",
+    },
+    {
       title: "About",
       to: "/about",
     },

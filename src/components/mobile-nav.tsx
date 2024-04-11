@@ -32,6 +32,10 @@ export function MobileNav() {
       to: "/cart",
     },
     {
+      title: "Order",
+      to: "/order",
+    },
+    {
       title: "About",
       to: "/about",
     },
