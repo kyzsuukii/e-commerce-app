@@ -29,7 +29,7 @@ function Products() {
 
   return (
     <div className="my-12 container mx-auto">
-      {data[0] ? (
+      {data && data[0] ? (
         <ListProducts products={data} />
       ) : (
         <div className="flex justify-center text-2xl">No Items</div>

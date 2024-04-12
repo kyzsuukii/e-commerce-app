@@ -29,7 +29,7 @@ function Order() {
 
   return (
     <div className="my-12 container mx-auto">
-      {data[0] ? (
+      {data && data[0] ? (
         <OrderList orders={data} />
       ) : (
         <div className="font-bold text-2xl">Order list is empty</div>

@@ -70,7 +70,7 @@ function DashboardProduct() {
           <Link to="/dashboard/upload">Add Product</Link>
         </Button>
       </div>
-      {data[0] ? (
+      {data && data[0] ? (
         <div className="my-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {data.map((product: any) => (
             <Card
