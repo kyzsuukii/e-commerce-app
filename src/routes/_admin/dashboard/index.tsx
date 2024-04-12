@@ -49,8 +49,8 @@ function Dashboard() {
           </Link>
         </div>
         <div>
-          {/* <Link to="/dashboard/users"> */}
-          <Card className="cursor-not-allowed hover:scale-105 transition-transform duration-200">
+          <Link to="/dashboard/orders">
+          <Card className="hover:scale-105 transition-transform duration-200">
             <CardHeader>
               <div className="flex items-center space-x-4">
                 <Box strokeWidth={1} size={54} className="text-gray-500" />
@@ -63,7 +63,7 @@ function Dashboard() {
               </div>
             </CardHeader>
           </Card>
-          {/* </Link> */}
+          </Link>
         </div>
       </div>
     </div>
