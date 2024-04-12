@@ -109,7 +109,7 @@ function Cart() {
                   variant="outline"
                   onClick={() => setShowAddressInput(true)}
                 >
-                  {address ? "Edit" : "Add"}
+                  {address ? "Edit Address" : "Add Address"}
                 </Button>
               </div>
             )}
