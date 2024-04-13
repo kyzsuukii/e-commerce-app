@@ -1,5 +1,6 @@
 import Loading from "@/components/loading";
 import { OrderTable } from "@/components/order-table";
+import { Toaster } from "@/components/ui/sonner";
 import { config } from "@/lib/config";
 import { createFileRoute } from "@tanstack/react-router";
 import axios from "axios";
@@ -20,11 +21,13 @@ async function getOrder(url: string, session: string) {
 
 function Order() {
   const { session } = Route.useRouteContext();
-  const { data, isLoading } = useSWR(["order/get", session], ([url, session]) =>
+  const { data, isLoading } = useSWR(["order/all", session], ([url, session]) =>
     getOrder(url, session)
   );
 
   if (isLoading) return <Loading />;
+
+  console.log(data);
 
   return (
     <div className="my-12 container mx-auto">
@@ -33,6 +36,7 @@ function Order() {
       ) : (
         <div className="font-bold text-2xl">Order list is empty</div>
       )}
+      <Toaster />
     </div>
   );
 }

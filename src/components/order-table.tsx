@@ -34,9 +34,83 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+import { Badge } from "./ui/badge";
+import axios, { AxiosError } from "axios";
+import { config } from "@/lib/config";
+import { toast } from "sonner";
 
 interface DataTableProps<TData> {
   data: TData[];
+}
+
+async function updateStatus(orderId: number, orderStatus: string) {
+  try {
+    const { data, status } = await axios.put(
+      `${config.SERVER_API_URL}/v1/order/status`,
+      {
+        orderId,
+        orderStatus,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("session")}`,
+        },
+      }
+    );
+    if (status === 200) {
+      return toast.success(data.msg, {
+        action: {
+          label: "refresh",
+          onClick: () => window.location.reload(),
+        },
+      });
+    }
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      if (error.response?.status == 401) {
+        localStorage.clear();
+        window.location.reload();
+      }
+      return toast.error(error.response?.data.errors[0].msg);
+    } else {
+      return toast.error("An unexpected error occurred");
+    }
+  }
+}
+
+async function deleteOrder(orderId: number) {
+  try {
+    const { status, data } = await axios.delete(
+      `${config.SERVER_API_URL}/v1/order/delete`,
+      {
+        data: {
+          orderId,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("session")}`,
+        },
+      }
+    );
+    if (status === 200) {
+      return toast.success(data.msg, {
+        action: {
+          label: "refresh",
+          onClick: () => window.location.reload(),
+        },
+      });
+    }
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      if (error.response?.status == 401) {
+        localStorage.clear();
+        window.location.reload();
+      }
+      return toast.error(error.response?.data.errors[0].msg);
+    } else {
+      return toast.error("An unexpected error occurred");
+    }
+  }
 }
 
 const columns: ColumnDef<any>[] = [
@@ -44,6 +118,11 @@ const columns: ColumnDef<any>[] = [
     accessorKey: "id",
     header: "Order Id",
     cell: ({ row }) => <div className="font-medium">{row.getValue("id")}</div>,
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+    cell: ({ row }) => <div className="font-bold">{row.getValue("email")}</div>,
   },
   {
     accessorKey: "total_amount",
@@ -61,13 +140,22 @@ const columns: ColumnDef<any>[] = [
     accessorKey: "order_date",
     header: "Order Date",
     cell: ({ row }) => {
-      return <div>{new Date(row.getValue("order_date")).toLocaleDateString()}</div>;
+      return (
+        <div>{new Date(row.getValue("order_date")).toLocaleDateString()}</div>
+      );
+    },
+  },
+  {
+    accessorKey: "order_status",
+    header: "Order Status",
+    cell: ({ row }) => {
+      return <Badge>{row.getValue("order_status")}</Badge>;
     },
   },
   {
     id: "actions",
     enableHiding: false,
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -78,13 +166,46 @@ const columns: ColumnDef<any>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Change Status</DropdownMenuLabel>
-            <DropdownMenuItem>PENDING</DropdownMenuItem>
-            <DropdownMenuItem>PROCESSING</DropdownMenuItem>
-            <DropdownMenuItem>SHIPPED</DropdownMenuItem>
-            <DropdownMenuItem>DELIVERED</DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={row.getValue("order_status") === "PENDING"}
+              className={cn(
+                row.getValue("order_status") === "PENDING" && "text-secondary"
+              )}
+              onClick={() => updateStatus(row.getValue("id"), "PENDING")}
+            >
+              PENDING
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={row.getValue("order_status") === "PROCESSING"}
+              className={cn(
+                row.getValue("order_status") === "PROCESSING" &&
+                  "text-secondary"
+              )}
+              onClick={() => updateStatus(row.getValue("id"), "PROCESSING")}
+            >
+              PROCESSING
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={row.getValue("order_status") === "SHIPPED"}
+              className={cn(
+                row.getValue("order_status") === "SHIPPED" && "text-secondary"
+              )}
+              onClick={() => updateStatus(row.getValue("id"), "SHIPPED")}
+            >
+              SHIPPED
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={row.getValue("order_status") === "DELIVERED"}
+              className={cn(
+                row.getValue("order_status") === "DELIVERED" && "text-secondary"
+              )}
+              onClick={() => updateStatus(row.getValue("id"), "DELIVERED")}
+            >
+              DELIVERED
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => deleteOrder(row.getValue("id"))}>
               <span className="text-red-600">Delete Order</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
