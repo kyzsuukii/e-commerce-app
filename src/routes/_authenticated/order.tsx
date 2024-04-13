@@ -44,7 +44,7 @@ function Order() {
 function OrderList({ orders }: any) {
   return orders.map((order: any) => (
     <Card key={order.id}>
-     <ScrollArea className="h-[calc(100vh-12rem)]">
+      <ScrollArea className="h-[calc(100vh-12rem)]">
         <CardHeader>
           <div className="text-xl font-semibold mb-3">Order ID: {order.id}</div>
           <div className="text-primary mb-2">
@@ -53,25 +53,27 @@ function OrderList({ orders }: any) {
           <div className="text-primary mb-4">
             Shipping Address: {order.address}
           </div>
+          <div>
+            <Badge className="mt-1">{order.order_status}</Badge>
+          </div>
         </CardHeader>
         <CardContent>
-            <div className="text-lg font-medium mb-2">Items:</div>
-            {order.items.map((item: any, index: number) => (
-              <div key={index} className="mb-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-primary font-bold">
-                    {item.quantity} x {item.product_name}
-                  </span>
-                  <span className="text-primary">${item.price}</span>
-                </div>
-                <div className="text-sm text-primary">
-                  {item.product_description}
-                </div>
-                <Badge className="mt-1">{item.order_status}</Badge>
+          <div className="text-lg font-medium mb-2">Items:</div>
+          {order.items.map((item: any, index: number) => (
+            <div key={index} className="mb-6">
+              <div className="flex items-center justify-between">
+                <span className="text-primary font-bold">
+                  {item.quantity} x {item.product_name}
+                </span>
+                <span className="text-primary">${item.price}</span>
               </div>
-            ))}
+              <div className="text-sm text-primary">
+                {item.product_description}
+              </div>
+            </div>
+          ))}
         </CardContent>
-     </ScrollArea>
+      </ScrollArea>
     </Card>
   ));
 }
