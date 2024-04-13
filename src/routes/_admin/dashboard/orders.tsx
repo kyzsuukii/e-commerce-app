@@ -27,8 +27,6 @@ function Order() {
 
   if (isLoading) return <Loading />;
 
-  console.log(data);
-
   return (
     <div className="my-12 container mx-auto">
       {data && data[0] ? (

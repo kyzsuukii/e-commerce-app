@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import {
   ColumnDef,
@@ -13,7 +11,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { ChevronDown, MoreHorizontal, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -86,6 +84,40 @@ async function deleteOrder(orderId: number) {
       {
         data: {
           orderId,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("session")}`,
+        },
+      }
+    );
+    if (status === 200) {
+      return toast.success(data.msg, {
+        action: {
+          label: "refresh",
+          onClick: () => window.location.reload(),
+        },
+      });
+    }
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      if (error.response?.status == 401) {
+        localStorage.clear();
+        window.location.reload();
+      }
+      return toast.error(error.response?.data.errors[0].msg);
+    } else {
+      return toast.error("An unexpected error occurred");
+    }
+  }
+}
+
+async function deleteOrderItem(orderItemId: number) {
+  try {
+    const { status, data } = await axios.delete(
+      `${config.SERVER_API_URL}/v1/order/item/delete`,
+      {
+        data: {
+          orderItemId,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("session")}`,
@@ -216,6 +248,12 @@ const columns: ColumnDef<any>[] = [
 ];
 
 export function OrderTable({ data }: DataTableProps<any>) {
+  const [expandedOrder, setExpandedOrder] = React.useState(null);
+
+  const toggleExpand = (orderId: any) => {
+    setExpandedOrder(expandedOrder === orderId ? null : orderId);
+  };
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -286,37 +324,77 @@ export function OrderTable({ data }: DataTableProps<any>) {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                <React.Fragment key={row.id}>
+                  <TableRow
+                    data-state={row.getIsSelected() && "selected"}
+                    onClick={() => toggleExpand(row.original.id)}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  {expandedOrder === row.original.id && (
+                    <TableRow>
+                      <TableCell colSpan={columns.length}>
+                        <div className="rounded-md border overflow-hidden border-none">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Item ID</TableHead>
+                                <TableHead>Product Name</TableHead>
+                                <TableHead>Quantity</TableHead>
+                                <TableHead>Price</TableHead>
+                                <TableHead>Action</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {row.original.items.map((item: any) => (
+                                <TableRow key={item.order_item_id}>
+                                  <TableCell>{item.order_item_id}</TableCell>
+                                  <TableCell>{item.product_name}</TableCell>
+                                  <TableCell>{item.quantity}</TableCell>
+                                  <TableCell>{item.price}</TableCell>
+                                  <TableCell>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() =>
+                                        deleteOrderItem(item.order_item_id)
+                                      }
+                                    >
+                                      <Trash size={14} />
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </React.Fragment>
               ))
             ) : (
               <TableRow>
