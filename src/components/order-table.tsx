@@ -244,7 +244,7 @@ export function OrderTable({ data }: DataTableProps<any>) {
   });
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="mx-auto container">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter Address..."
