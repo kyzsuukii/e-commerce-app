@@ -13,15 +13,36 @@ import {
 } from "./ui/sheet";
 import { ScrollArea } from "./ui/scroll-area";
 import { Link, useRouter } from "@tanstack/react-router";
-import { ModeToggle } from "./mode-toggle";
 import { MobileNav } from "./mobile-nav";
-import { CircleUser, LogOut } from "lucide-react";
+import { CircleUser, LogOut, Moon, Shield, Sun, SunMoon } from "lucide-react";
 import { config } from "@/lib/config";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from "./ui/dropdown-menu";
+import { useTheme } from "./theme-provider";
 
 export default function SiteHeader() {
   const [open, setOpen] = React.useState(false);
   const { totalUniqueItems, items } = useCart();
   const router = useRouter();
+  const { setTheme } = useTheme();
+
+  const [isAdmin, setIsAdmin] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isAdmin = localStorage.getItem("isAdmin");
+      if (isAdmin === "true") {
+        setIsAdmin(true);
+      }
+    }
+  }, [isAdmin]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -73,23 +94,62 @@ export default function SiteHeader() {
               </SheetHeader>
             </SheetContent>
           </Sheet>
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/profile">
-              <CircleUser />
-            </Link>
-          </Button>
-          <ModeToggle />
-          <Button
-            variant="destructive"
-            size="icon"
-            onClick={async () => {
-              localStorage.clear();
-              router.invalidate();
-              window.location.reload();
-            }}
-          >
-            <LogOut size={18} />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <CircleUser />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="mt-4">
+              <DropdownMenuItem
+                onClick={() => router.navigate({ to: "/profile" })}
+              >
+                <CircleUser className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              {isAdmin && (
+                <DropdownMenuItem
+                  onClick={() => router.navigate({ to: "/dashboard/products" })}
+                >
+                  <Shield className="mr-2 h-4 w-4" />
+                  Dashboard
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <SunMoon className="mr-2 h-4 w-4" />
+                  <span>Theme</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent className="mx-2">
+                  <DropdownMenuItem onClick={() => setTheme("light")}>
+                    <Sun className="mr-2 h-4 w-4" />
+                    Light
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("dark")}>
+                    <Moon className="mr-2 h-4 w-4" />
+                    Dark
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("system")}>
+                    <SunMoon className="mr-2 h-4 w-4" />
+                    System
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+              <DropdownMenuItem
+                className="text-red-500"
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    localStorage.clear();
+                    router.invalidate();
+                    window.location.reload();
+                  }
+                }}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

@@ -68,11 +68,6 @@ export function MobileNav() {
                 {nav.title}
               </MobileLink>
             ))}
-            {isAdmin && (
-              <MobileLink to="/dashboard" onOpenChange={setOpen}>
-                Dashboard
-              </MobileLink>
-            )}
           </div>
         </div>
       </SheetContent>
