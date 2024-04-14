@@ -11,7 +11,16 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown, MoreHorizontal, Trash } from "lucide-react";
+import {
+  ChevronDown,
+  CircleCheck,
+  CircleDashed,
+  MoreHorizontal,
+  Package,
+  PackageSearch,
+  Trash,
+  Truck,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +29,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -197,48 +210,87 @@ const columns: ColumnDef<any>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Change Status</DropdownMenuLabel>
-            <DropdownMenuItem
-              disabled={row.getValue("order_status") === "PENDING"}
-              className={cn(
-                row.getValue("order_status") === "PENDING" && "text-secondary"
-              )}
-              onClick={() => updateStatus(row.getValue("id"), "PENDING")}
-            >
-              PENDING
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={row.getValue("order_status") === "PROCESSING"}
-              className={cn(
-                row.getValue("order_status") === "PROCESSING" &&
-                  "text-secondary"
-              )}
-              onClick={() => updateStatus(row.getValue("id"), "PROCESSING")}
-            >
-              PROCESSING
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={row.getValue("order_status") === "SHIPPED"}
-              className={cn(
-                row.getValue("order_status") === "SHIPPED" && "text-secondary"
-              )}
-              onClick={() => updateStatus(row.getValue("id"), "SHIPPED")}
-            >
-              SHIPPED
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={row.getValue("order_status") === "DELIVERED"}
-              className={cn(
-                row.getValue("order_status") === "DELIVERED" && "text-secondary"
-              )}
-              onClick={() => updateStatus(row.getValue("id"), "DELIVERED")}
-            >
-              DELIVERED
-            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <span className="flex items-center gap-2">
+                  <Truck className="h-4 w-4" />
+                  Status
+                </span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent className="mx-2">
+                  <DropdownMenuItem
+                    disabled={row.getValue("order_status") === "PENDING"}
+                    className={cn(
+                      row.getValue("order_status") === "PENDING" &&
+                        "text-muted-foreground"
+                    )}
+                    onClick={() => updateStatus(row.getValue("id"), "PENDING")}
+                  >
+                    <CircleDashed className="mr-2 h-4 w-4" />
+                    PENDING
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    disabled={row.getValue("order_status") === "PROCESSING"}
+                    className={cn(
+                      row.getValue("order_status") === "PROCESSING" &&
+                        "text-muted-foreground"
+                    )}
+                    onClick={() =>
+                      updateStatus(row.getValue("id"), "PROCESSING")
+                    }
+                  >
+                    <PackageSearch className="mr-2 h-4 w-4" />
+                    PROCESSING
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    disabled={row.getValue("order_status") === "SHIPPED"}
+                    className={cn(
+                      row.getValue("order_status") === "SHIPPED" &&
+                        "text-muted-foreground"
+                    )}
+                    onClick={() => updateStatus(row.getValue("id"), "SHIPPED")}
+                  >
+                    <Package className="mr-2 h-4 w-4" />
+                    SHIPPED
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    disabled={row.getValue("order_status") === "DELIVERED"}
+                    className={cn(
+                      row.getValue("order_status") === "DELIVERED" &&
+                        "text-muted-foreground"
+                    )}
+                    onClick={() =>
+                      updateStatus(row.getValue("id"), "DELIVERED")
+                    }
+                  >
+                    <Truck className="mr-2 h-4 w-4" />
+                    DELIVERED
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    disabled={row.getValue("order_status") === "COMPLETED"}
+                    className={cn(
+                      row.getValue("order_status") === "COMPLETED" &&
+                        "text-muted-foreground"
+                    )}
+                    onClick={() =>
+                      updateStatus(row.getValue("id"), "COMPLETED")
+                    }
+                  >
+                    <CircleCheck className="mr-2 h-4 w-4" />
+                    COMPLETED
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => deleteOrder(row.getValue("id"))}>
-              <span className="text-red-600">Delete Order</span>
+            <DropdownMenuItem
+              className="text-red-600"
+              onClick={() => deleteOrder(row.getValue("id"))}
+            >
+              <Trash className="mr-2 h-4 w-4" />
+              Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

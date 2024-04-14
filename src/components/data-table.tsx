@@ -13,7 +13,15 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  MoreHorizontal,
+  Shield,
+  User,
+  UserCog,
+  UserX,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +30,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -153,24 +165,41 @@ const columns: ColumnDef<any>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Change Role</DropdownMenuLabel>
-            {user.role !== "ADMIN" ? (
-              <DropdownMenuItem
-                onClick={() => updateRole(user.id, "ADMIN")}
-              >
-                ADMIN
-              </DropdownMenuItem>
-            ) : (
-              <DropdownMenuItem
-                onClick={() => updateRole(user.id, "CUSTOMER")}
-              >
-                CUSTOMER
-              </DropdownMenuItem>
-            )}
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <span className="flex items-center gap-2">
+                  <UserCog className="h-4 w-4" />
+                  Role
+                </span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent className="mx-2">
+                  {user.role !== "ADMIN" ? (
+                    <DropdownMenuItem
+                      onClick={() => updateRole(user.id, "ADMIN")}
+                    >
+                      <Shield className="mr-2 h-4 w-4" />
+                      ADMIN
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem
+                      onClick={() => updateRole(user.id, "CUSTOMER")}
+                    >
+                      <User className="mr-2 h-4 w-4" />
+                      CUSTOMER
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => deleteUser(user.id)}>
-              <span className="text-red-600">Delete</span>
+            <DropdownMenuItem
+              className="text-red-600"
+              onClick={() => deleteUser(user.id)}
+            >
+              <UserX className="mr-2 h-4 w-4" />
+              Remove
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
