@@ -132,7 +132,7 @@ function DashboardProduct() {
           ))}
         </div>
       ) : (
-        <div className="flex justify-center text-2xl">No Items</div>
+        <div className="font-bold text-2xl">No Items</div>
       )}
     </div>
   );
