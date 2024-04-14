@@ -29,7 +29,11 @@ function Users() {
 
   return (
     <div className="my-12 container mx-auto">
-      <DataTable data={data} />
+      {data && data[0] ? (
+        <DataTable data={data} />
+      ) : (
+        <div className="font-bold text-2xl">User list is empty</div>
+      )}
       <Toaster />
     </div>
   );
