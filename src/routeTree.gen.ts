@@ -24,7 +24,6 @@ import { Route as AuthenticatedCartImport } from './routes/_authenticated/cart'
 import { Route as AuthenticatedAboutImport } from './routes/_authenticated/about'
 import { Route as AuthRegisterImport } from './routes/_auth/register'
 import { Route as AuthLoginImport } from './routes/_auth/login'
-import { Route as AdminDashboardIndexImport } from './routes/_admin/dashboard/index'
 import { Route as AuthenticatedProductProductIdImport } from './routes/_authenticated/product.$productId'
 import { Route as AuthenticatedCategoryCategoryNameImport } from './routes/_authenticated/category.$categoryName'
 import { Route as AdminDashboardUsersImport } from './routes/_admin/dashboard/users'
@@ -100,11 +99,6 @@ const AuthRegisterRoute = AuthRegisterImport.update({
 const AuthLoginRoute = AuthLoginImport.update({
   path: '/login',
   getParentRoute: () => AuthRoute,
-} as any)
-
-const AdminDashboardIndexRoute = AdminDashboardIndexImport.update({
-  path: '/dashboard/',
-  getParentRoute: () => AdminRoute,
 } as any)
 
 const AuthenticatedProductProductIdRoute =
@@ -231,10 +225,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProductProductIdImport
       parentRoute: typeof AuthenticatedImport
     }
-    '/_admin/dashboard/': {
-      preLoaderRoute: typeof AdminDashboardIndexImport
-      parentRoute: typeof AdminImport
-    }
     '/_admin/dashboard/product/$productId': {
       preLoaderRoute: typeof AdminDashboardProductProductIdImport
       parentRoute: typeof AdminImport
@@ -254,7 +244,6 @@ export const routeTree = rootRoute.addChildren([
     AdminDashboardProductsRoute,
     AdminDashboardUploadRoute,
     AdminDashboardUsersRoute,
-    AdminDashboardIndexRoute,
     AdminDashboardProductProductIdRoute,
     AdminDashboardUpdateProductIdRoute,
   ]),
