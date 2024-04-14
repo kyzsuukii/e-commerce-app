@@ -11,20 +11,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Info, SquarePen, Trash } from "lucide-react";
 import useSWR from "swr";
+import { ChevronDown, Edit, Info, Trash } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const Route = createFileRoute("/_admin/dashboard/products")({
   component: DashboardProduct,
@@ -62,87 +59,76 @@ function DashboardProduct() {
 
   return (
     <div className="my-12 container mx-auto">
-      <div className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        Products Management
-      </div>
-      <div className="mt-6">
-        <Button asChild>
-          <Link to="/dashboard/upload">Add Product</Link>
-        </Button>
-      </div>
       {data && data[0] ? (
-        <div className="my-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {data.map((product: any) => (
-            <Card
-              key={product.id}
-              className="hover:scale-105 transition-transform duration-200"
-            >
-              <CardHeader>
-                <div className="aspect-w-16 aspect-h-12 object-cover">
-                  <LazyLoadImage
-                    className="rounded-sm"
-                    src={`${config.SERVER_API_URL}/${product.thumbnail}`}
-                    alt={product.title}
-                  />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardTitle className="truncate">{product.name}</CardTitle>
-                <CardDescription className="truncate">
-                  {product.description}
-                </CardDescription>
-              </CardContent>
-              <CardFooter className="gap-4 flex-wrap">
-                <Button variant="secondary" size="icon" asChild>
-                  <Link
-                    to="/dashboard/product/$productId"
-                    params={{
-                      productId: product.id,
-                    }}
-                  >
-                    <Info size={18} />
-                  </Link>
-                </Button>
-                <Button variant="secondary" size="icon" asChild>
-                  <Link
-                    to="/dashboard/update/$productId/"
-                    params={{
-                      productId: product.id,
-                    }}
-                  >
-                    <SquarePen size={18} />
-                  </Link>
-                </Button>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive" size="icon">
-                      <Trash size={18} />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete from our servers.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={async () => {
-                          await deleteProduct(product.id, session);
-                        }}
+        <div className="my-12 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+          {data.map((product: any, index: number) => (
+            <div key={index}>
+              <Card>
+                <CardHeader>
+                  <div className="aspect-w-16 aspect-h-12 object-cover">
+                    <LazyLoadImage
+                      className="rounded-sm object-cover transition-all hover:scale-105"
+                      src={`${config.SERVER_API_URL}/${product.thumbnail}`}
+                      alt={product.title}
+                    />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <CardTitle className="truncate">{product.name}</CardTitle>
+                  <CardDescription className="truncate">
+                    {product.description}
+                  </CardDescription>
+                </CardContent>
+                <CardFooter>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="h-8 w-8 p-0">
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="w-full justify-start text-muted-foreground"
+                        asChild
                       >
+                        <Link
+                          to="/dashboard/product/$productId"
+                          params={{
+                            productId: product.id,
+                          }}
+                        >
+                          <Info className="mr-2 h-4 w-4" />
+                          Details
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="w-full justify-start text-muted-foreground"
+                        asChild
+                      >
+                        <Link
+                          to="/dashboard/update/$productId/"
+                          params={{
+                            productId: product.id,
+                          }}
+                        >
+                          <Edit className="mr-2 h-4 w-4" />
+                          Update
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="w-full justify-start text-red-600"
+                        onClick={() => deleteProduct(product.id, session)}
+                      >
+                        <Trash className="mr-2 h-4 w-4" />
                         Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </CardFooter>
-            </Card>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </CardFooter>
+              </Card>
+            </div>
           ))}
         </div>
       ) : (
