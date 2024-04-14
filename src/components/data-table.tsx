@@ -49,6 +49,7 @@ import {
 import axios, { AxiosError } from "axios";
 import { config } from "@/lib/config";
 import { toast } from "sonner";
+import { Badge } from "./ui/badge";
 
 interface DataTableProps<TData> {
   data: TData[];
@@ -146,9 +147,9 @@ const columns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "role",
-    header: () => <div className="text-right">Role</div>,
+    header: () => "Role",
     cell: ({ row }) => {
-      return <div className="font-bold">{row.getValue("role")}</div>;
+      return <Badge>{row.getValue("role")}</Badge>;
     },
   },
   {
