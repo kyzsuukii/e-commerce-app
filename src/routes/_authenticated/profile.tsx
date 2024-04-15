@@ -17,7 +17,6 @@ import { UserCircle } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: Profile,
-  loader: ({ context: { session } }) => session,
   pendingComponent: Loading,
 });
 
@@ -38,7 +37,7 @@ async function getProfile(token: string) {
 }
 
 function Profile() {
-  const session = Route.useLoaderData();
+  const { session } = Route.useRouteContext();
   const { data, error, isLoading, isError } = useQuery({
     queryKey: ["profile", session],
     queryFn: () => getProfile(session),

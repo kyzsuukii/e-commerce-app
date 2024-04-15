@@ -27,6 +27,10 @@ export default function MainNav() {
       to: "/cart",
     },
     {
+      title: "Order",
+      to: "/order",
+    },
+    {
       title: "About",
       to: "/about",
     },
@@ -48,14 +52,6 @@ export default function MainNav() {
             {nav.title}
           </Link>
         ))}
-        {isAdmin && (
-          <Link
-            to="/dashboard"
-            className="transition-colors text-foreground/60 hover:text-foreground/80 [&.active]:text-foreground"
-          >
-            Dashboard
-          </Link>
-        )}
       </nav>
     </div>
   );

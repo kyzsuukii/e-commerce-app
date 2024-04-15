@@ -69,7 +69,7 @@ export default function RegisterForm() {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -80,7 +80,7 @@ export default function RegisterForm() {
     } finally {
       setLoading(false);
     }
-    toast.success("registered successfully");
+    return toast.success("registered successfully");
   }
 
   return (

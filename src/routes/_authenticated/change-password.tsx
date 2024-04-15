@@ -4,11 +4,11 @@ import ChangePasswordForm from "@/components/change-password-form";
 
 export const Route = createFileRoute("/_authenticated/change-password")({
   component: ChangePassword,
-  loader: ({ context: { session } }) => session,
 });
 
 function ChangePassword() {
-  const session = Route.useLoaderData();
+  const { session } = Route.useRouteContext();
+
   return (
     <div className="my-12 container mx-auto">
       <ChangePasswordForm session={session} />

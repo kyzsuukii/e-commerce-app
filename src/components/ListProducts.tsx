@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { FaDollarSign, FaStar } from "react-icons/fa6";
 import {
   Card,
   CardContent,
@@ -10,6 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { config } from "@/lib/config";
+import { Box, DollarSign } from "lucide-react";
 
 export default function ListProducts({ products }: { products: any }) {
   return (
@@ -23,7 +24,7 @@ export default function ListProducts({ products }: { products: any }) {
             }}
           >
             <CardHeader>
-              <CardTitle className="truncate">{product.title}</CardTitle>
+              <CardTitle className="truncate">{product.name}</CardTitle>
               <CardDescription className="truncate">
                 {product.description}
               </CardDescription>
@@ -32,19 +33,19 @@ export default function ListProducts({ products }: { products: any }) {
               <div className="aspect-w-16 aspect-h-12 object-cover">
                 <LazyLoadImage
                   className="rounded"
-                  src={product.thumbnail}
-                  alt={product.title}
+                  src={`${config.SERVER_API_URL}/${product.thumbnail}`}
+                  alt={product.name}
                 />
               </div>
             </CardContent>
             <CardFooter className="gap-4 flex-wrap">
               <span className="inline-flex items-center gap-1">
-                <FaDollarSign />
+                <DollarSign size={16} />
                 <span>{product.price}</span>
               </span>
-              <span className="inline-flex items-center gap-1 text-yellow-500">
-                <FaStar />
-                <span>{product.rating}</span>
+              <span className="inline-flex items-center gap-1">
+                <Box size={16} />
+                <span>{product.stock}</span>
               </span>
               <Badge variant="outline">{product.category}</Badge>
             </CardFooter>

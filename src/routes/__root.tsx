@@ -12,23 +12,22 @@ type RouterContext = {
 };
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  loader: async ({ context: { session } }) => {
-    return session;
-  },
   component: Root,
 });
 
 function Root() {
-  const session = Route.useLoaderData();
+  const { session } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <>
-      {session && pathname.includes("/dashboard") ? (
-        <DashboardHeader />
-      ) : (
-        <SiteHeader />
-      )}
+      {session ? (
+        pathname.includes("/dashboard") ? (
+          <DashboardHeader />
+        ) : (
+          <SiteHeader />
+        )
+      ) : null}
       <main>
         <Outlet />
       </main>

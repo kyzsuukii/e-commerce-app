@@ -2,32 +2,28 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Store } from "lucide-react";
+import { Home, Menu } from "lucide-react";
 import { Link, useRouter } from "@tanstack/react-router";
 
-export function MobileNav() {
+export function DashboardMobileNav() {
   const [open, setOpen] = useState(false);
 
   const data = [
     {
       title: "Products",
-      to: "/products",
+      to: "/dashboard/products",
     },
     {
-      title: "Search",
-      to: "/search",
+      title: "Users",
+      to: "/dashboard/users",
     },
     {
-      title: "Cart",
-      to: "/cart",
+      title: "Orders",
+      to: "/dashboard/orders",
     },
     {
-      title: "Order",
-      to: "/order",
-    },
-    {
-      title: "About",
-      to: "/about",
+      title: "Upload",
+      to: "/dashboard/upload",
     },
   ];
 
@@ -48,8 +44,8 @@ export function MobileNav() {
           className="flex items-center gap-2"
           onOpenChange={setOpen}
         >
-          <Store />
-          <span className="font-bold">FakeStore</span>
+          <Home className="h-4 w-4" />
+          <span className="font-bold">Home</span>
         </MobileLink>
         <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-3">

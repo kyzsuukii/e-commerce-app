@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 export const Route = createFileRoute("/_authenticated/category/$categoryName")({
-  loader: ({ params: { categoryName } }) => categoryName,
   component: Category,
   pendingComponent: Loading,
 });
@@ -22,7 +21,7 @@ async function getCategory(category: string) {
 }
 
 function Category() {
-  const categoryName = Route.useLoaderData();
+  const { categoryName } = Route.useParams();
 
   const { data, isLoading } = useQuery({
     queryKey: ["product", categoryName],

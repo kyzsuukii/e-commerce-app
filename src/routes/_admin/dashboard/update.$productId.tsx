@@ -1,12 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
 import Loading from "@/components/loading";
-import Detail from "@/components/Detail";
-import axios from "axios";
+import { Toaster } from "@/components/ui/sonner";
+import ProductUpdateForm from "@/components/update-form";
 import { config } from "@/lib/config";
+import { createFileRoute } from "@tanstack/react-router";
+import axios from "axios";
 import useSWR from "swr";
 
-export const Route = createFileRoute("/_authenticated/product/$productId")({
-  component: ProductDetail,
+export const Route = createFileRoute("/_admin/dashboard/update/$productId")({
+  component: UpdateProduct,
 });
 
 async function getProductDetails(url: string, session: string) {
@@ -15,23 +16,23 @@ async function getProductDetails(url: string, session: string) {
       Authorization: `Bearer ${session}`,
     },
   });
+  delete data.thumbnail;
   return data;
 }
 
-function ProductDetail() {
+function UpdateProduct() {
   const { productId } = Route.useParams();
   const { session } = Route.useRouteContext();
 
   const { data, isLoading } = useSWR(
     ["product/get/" + productId, session],
-    ([url, session]) => getProductDetails(url, session)
+    ([url, session]) => getProductDetails(url, session),
   );
 
   if (isLoading) return <Loading />;
 
-  return (
-    <div className="mt-12 container mx-auto">
-      <Detail product={data} />
-    </div>
-  );
+  return <div className="my-12 container mx-auto">
+    <ProductUpdateForm data={data} session={session} />
+    <Toaster />
+  </div>;
 }
