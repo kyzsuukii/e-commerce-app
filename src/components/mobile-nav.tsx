@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -7,16 +7,6 @@ import { Link, useRouter } from "@tanstack/react-router";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const isAdmin = localStorage.getItem("isAdmin");
-      if (isAdmin === "true") {
-        setIsAdmin(true);
-      }
-    }
-  }, [isAdmin]);
 
   const data = [
     {
