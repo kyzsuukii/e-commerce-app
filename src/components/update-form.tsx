@@ -72,10 +72,10 @@ const Spinner = () => (
 );
 
 export default function ProductUpdateForm({
-  data,
+  product,
   session,
 }: {
-  data: any;
+  product: any;
   session: string;
 }) {
   const { trigger, isMutating } = useSWRMutation(
@@ -86,12 +86,12 @@ export default function ProductUpdateForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id: data?.id,
-      name: data?.name,
-      category: data?.category,
-      price: `${data?.price}`,
-      stock: `${data?.stock}`,
-      description: data?.description,
+      id: product?.id,
+      name: product?.name,
+      category: product?.category,
+      price: `${product?.price}`,
+      stock: `${product?.stock}`,
+      description: product?.description,
     },
   });
 
@@ -102,7 +102,7 @@ export default function ProductUpdateForm({
   return (
     <Form {...form}>
       <form
-        encType="multipart/form-data"
+        encType="multipart/form-product"
         onSubmit={form.handleSubmit(onSubmit)}
         className="grid grid-cols-1 gap-6"
       >

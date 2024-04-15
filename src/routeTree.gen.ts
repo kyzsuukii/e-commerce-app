@@ -30,7 +30,6 @@ import { Route as AdminDashboardUsersImport } from './routes/_admin/dashboard/us
 import { Route as AdminDashboardUploadImport } from './routes/_admin/dashboard/upload'
 import { Route as AdminDashboardProductsImport } from './routes/_admin/dashboard/products'
 import { Route as AdminDashboardOrdersImport } from './routes/_admin/dashboard/orders'
-import { Route as AdminDashboardProductProductIdImport } from './routes/_admin/dashboard/product.$productId'
 
 // Create/Update Routes
 
@@ -132,12 +131,6 @@ const AdminDashboardOrdersRoute = AdminDashboardOrdersImport.update({
   getParentRoute: () => AdminRoute,
 } as any)
 
-const AdminDashboardProductProductIdRoute =
-  AdminDashboardProductProductIdImport.update({
-    path: '/dashboard/product/$productId',
-    getParentRoute: () => AdminRoute,
-  } as any)
-
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -218,10 +211,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProductProductIdImport
       parentRoute: typeof AuthenticatedImport
     }
-    '/_admin/dashboard/product/$productId': {
-      preLoaderRoute: typeof AdminDashboardProductProductIdImport
-      parentRoute: typeof AdminImport
-    }
   }
 }
 
@@ -233,7 +222,6 @@ export const routeTree = rootRoute.addChildren([
     AdminDashboardProductsRoute,
     AdminDashboardUploadRoute,
     AdminDashboardUsersRoute,
-    AdminDashboardProductProductIdRoute,
   ]),
   AuthRoute.addChildren([AuthLoginRoute, AuthRegisterRoute]),
   AuthenticatedRoute.addChildren([
