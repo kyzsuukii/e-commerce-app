@@ -1,6 +1,7 @@
 import { Button } from "./ui/button";
 import { useRouter } from "@tanstack/react-router";
 import { BiHome } from "react-icons/bi";
+import { DashboardMobileNav } from "./dashboard-mobile-nav";
 
 export default function DashboardHeader() {
   const router = useRouter();
@@ -17,6 +18,9 @@ export default function DashboardHeader() {
             <BiHome size={20} />
             Home
           </Button>
+        </div>
+        <div className="mr-4 block md:hidden">
+          <DashboardMobileNav />
         </div>
       </div>
     </header>

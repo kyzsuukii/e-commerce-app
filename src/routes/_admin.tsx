@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_admin")({
     }
   },
   component: () => (
-    <div className="block lg:grid lg:grid-cols-[230px,1fr]">
+    <div className="block md:grid md:grid-cols-[0.2fr,1fr]">
       <Sidebar />
       <div>
         <Outlet />
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_admin")({
 
 export function Sidebar() {
   return (
-    <div className="pb-12 hidden lg:block">
+    <div className="pb-12 hidden md:block">
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
