@@ -153,6 +153,13 @@ const columns: ColumnDef<any>[] = [
     },
   },
   {
+    accessorKey: "address",
+    header: () => "Address",
+    cell: ({ row }) => {
+      return <div>{row.getValue("address") || "No address"}</div>;
+    },
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
