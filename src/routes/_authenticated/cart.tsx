@@ -4,7 +4,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { config } from "@/lib/config";
 import { createFileRoute } from "@tanstack/react-router";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
 import { FaDollarSign } from "react-icons/fa6";
 import { FiMinus, FiPlus, FiTrash } from "react-icons/fi";
 import { useCart } from "react-use-cart";
@@ -56,14 +55,6 @@ function Cart() {
     createOrder
   );
 
-  const [showAddressInput, setShowAddressInput] = useState(false);
-  const [address, setAddress] = useState(localStorage.getItem("address") || "");
-
-  const handleSaveAddress = () => {
-    address && localStorage.setItem("address", address);
-    setShowAddressInput(false);
-  };
-
   const totalPrice = items.reduce((acc, item) => {
     return (
       acc +
@@ -75,50 +66,19 @@ function Cart() {
 
   function handleCheckout(
     totalAmount: number,
-    address: string,
     items: any[]
   ): void {
-    trigger({ totalAmount, address, items });
+    trigger({ totalAmount, items });
   }
 
   return (
     <div className="my-12 container mx-auto">
       {!isEmpty ? (
         <>
-          <div className="mb-4">
-            <div className="text-xl font-bold mb-4">shipping address</div>
-            {showAddressInput ? (
-              <div className="flex items-center space-x-4">
-                <Input
-                  type="text"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Enter your address"
-                />
-                <Button variant="outline" onClick={handleSaveAddress}>
-                  Save
-                </Button>
-              </div>
-            ) : (
-              <div className="flex justify-between items-center">
-                <span className="text-primary/50">
-                  {address || "shipping address not set"}
-                </span>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setShowAddressInput(true)}
-                >
-                  {address ? "Edit Address" : "Add Address"}
-                </Button>
-              </div>
-            )}
-          </div>
           <Button
             disabled={isMutating}
             className="w-full md:w-auto disabled:opacity-75 disabled:cursor-not-allowed"
-            variant="outline"
-            onClick={() => handleCheckout(totalPrice, address, items)}
+            onClick={() => handleCheckout(totalPrice, items)}
           >
             {isMutating ? <Spinner /> : "Checkout"}
           </Button>
