@@ -36,7 +36,6 @@ export const formSchema = z.object({
 
 async function uploadProduct([url, session]: any, { arg }: { arg: any }) {
   try {
-    console.log(arg);
     const { status, data } = await axios.post(
       `${config.SERVER_API_URL}/v1/${url}`,
       arg,
