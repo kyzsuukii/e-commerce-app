@@ -17,7 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { config } from "@/lib/config";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import axios, { AxiosError } from "axios";
 import { Home, KeyRound, UserCircle } from "lucide-react";
 import { z } from "zod";
@@ -36,6 +36,7 @@ import useSWRMutation from "swr/mutation";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import useSWR from "swr";
+import ChangePasswordForm from "@/components/change-password-form";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: Profile,
@@ -178,12 +179,21 @@ function Profile() {
               </Form>
             </DialogContent>
           </Dialog>
-          <Button asChild>
-            <Link to="/change-password">
-              <KeyRound className="mr-2 h-4 w-4" />
-              Change Password
-            </Link>
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <KeyRound className="mr-2 h-4 w-4" />
+                Change Password
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Change Password</DialogTitle>
+                <DialogDescription>Input your new password</DialogDescription>
+              </DialogHeader>
+              <ChangePasswordForm session={session} />
+            </DialogContent>
+          </Dialog>
         </CardFooter>
       </Card>
       <Toaster />

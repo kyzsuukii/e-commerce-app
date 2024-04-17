@@ -19,7 +19,6 @@ import { Route as AuthenticatedSearchImport } from './routes/_authenticated/sear
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedProductsImport } from './routes/_authenticated/products'
 import { Route as AuthenticatedOrderImport } from './routes/_authenticated/order'
-import { Route as AuthenticatedChangePasswordImport } from './routes/_authenticated/change-password'
 import { Route as AuthenticatedCartImport } from './routes/_authenticated/cart'
 import { Route as AuthenticatedAboutImport } from './routes/_authenticated/about'
 import { Route as AuthRegisterImport } from './routes/_auth/register'
@@ -71,12 +70,6 @@ const AuthenticatedOrderRoute = AuthenticatedOrderImport.update({
   path: '/order',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-
-const AuthenticatedChangePasswordRoute =
-  AuthenticatedChangePasswordImport.update({
-    path: '/change-password',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 
 const AuthenticatedCartRoute = AuthenticatedCartImport.update({
   path: '/cart',
@@ -156,10 +149,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCartImport
       parentRoute: typeof AuthenticatedImport
     }
-    '/_authenticated/change-password': {
-      preLoaderRoute: typeof AuthenticatedChangePasswordImport
-      parentRoute: typeof AuthenticatedImport
-    }
     '/_authenticated/order': {
       preLoaderRoute: typeof AuthenticatedOrderImport
       parentRoute: typeof AuthenticatedImport
@@ -216,7 +205,6 @@ export const routeTree = rootRoute.addChildren([
   AuthenticatedRoute.addChildren([
     AuthenticatedAboutRoute,
     AuthenticatedCartRoute,
-    AuthenticatedChangePasswordRoute,
     AuthenticatedOrderRoute,
     AuthenticatedProductsRoute,
     AuthenticatedProfileRoute,
