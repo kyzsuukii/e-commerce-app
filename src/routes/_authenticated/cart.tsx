@@ -14,33 +14,6 @@ export const Route = createFileRoute("/_authenticated/cart")({
   component: Cart,
 });
 
-async function createOrder([url, session]: any, { arg }: { arg: any }) {
-  try {
-    const { data, status } = await axios.post(
-      `${config.SERVER_API_URL}/v1/${url}`,
-      arg,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-    if (status === 200) {
-      return toast.success(data.msg);
-    }
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (error.response?.status == 401) {
-        localStorage.clear();
-        window.location.reload();
-      }
-      return toast.error(error.response?.data.errors[0].msg);
-    } else {
-      return toast.error("An unexpected error occurred");
-    }
-  }
-}
-
 const Spinner = () => (
   <div className="border-background h-5 w-5 animate-spin rounded-full border-2 border-t-blue-600" />
 );
@@ -50,10 +23,34 @@ function Cart() {
 
   const { isEmpty, items, updateItemQuantity, removeItem } = useCart();
 
-  const { trigger, isMutating } = useSWRMutation(
-    ["order/create", session],
-    createOrder
-  );
+  async function createOrder([url]: string[], { arg }: { arg: any }) {
+    try {
+      const { data, status } = await axios.post(
+        `${config.SERVER_API_URL}/v1/${url}`,
+        arg,
+        {
+          headers: {
+            Authorization: `Bearer ${session}`,
+          },
+        }
+      );
+      if (status === 200) {
+        return toast.success(data.msg);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status == 401) {
+          localStorage.clear();
+          window.location.reload();
+        }
+        return toast.error(error.response?.data.errors[0].msg);
+      } else {
+        return toast.error("An unexpected error occurred");
+      }
+    }
+  }
+
+  const { trigger, isMutating } = useSWRMutation(["order/create"], createOrder);
 
   const totalPrice = items.reduce((acc, item) => {
     return (
@@ -64,10 +61,7 @@ function Cart() {
     );
   }, 0);
 
-  function handleCheckout(
-    totalAmount: number,
-    items: any[]
-  ): void {
+  function handleCheckout(totalAmount: number, items: any[]): void {
     trigger({ totalAmount, items });
   }
 
