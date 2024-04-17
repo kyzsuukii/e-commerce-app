@@ -99,7 +99,7 @@ async function deleteUser(id: number) {
           id,
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("session")}`,
+          Authorization: `Bearer ${config.SESSION}`,
         },
       }
     );
