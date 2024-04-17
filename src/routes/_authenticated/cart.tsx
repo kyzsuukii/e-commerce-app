@@ -35,6 +35,7 @@ function Cart() {
         }
       );
       if (status === 200) {
+        items.forEach((item) => removeItem(item.id));
         return toast.success(data.msg);
       }
     } catch (error) {
