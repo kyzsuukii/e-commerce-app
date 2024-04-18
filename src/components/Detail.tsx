@@ -42,6 +42,7 @@ export default function Detail({ product }: any) {
           </ul>
           <div className="mb-6">
             <Button
+            disabled={product.stock === 0}
               onClick={() => {
                 addItem(product);
                 toast.success("Product added to cart", {

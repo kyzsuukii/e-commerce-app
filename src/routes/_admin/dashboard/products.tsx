@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import axios from "axios";
 import { config } from "@/lib/config.ts";
 import Loading from "@/components/loading.tsx";
@@ -22,6 +22,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import ProductUpdateForm from "@/components/update-form";
+import { Toaster } from "@/components/ui/sonner";
+import ProductDetail from "@/components/product-detail";
 
 export const Route = createFileRoute("/_admin/dashboard/products")({
   component: DashboardProduct,
@@ -50,6 +61,10 @@ async function deleteProduct(id: string, session: string) {
 
 function DashboardProduct() {
   const { session } = Route.useRouteContext();
+  const [openDetail, setOpenDetail] = useState<boolean>(false);
+  const [openUpdate, setOpenUpdate] = useState<boolean>(false);
+  const [product, setProduct] = useState<object>({});
+
   const { data, isLoading } = useSWR(
     ["product/all", session],
     ([url, session]) => getAllProduct(url, session)
@@ -91,31 +106,23 @@ function DashboardProduct() {
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         className="w-full justify-start text-muted-foreground"
-                        asChild
+                        onClick={() => {
+                          setOpenDetail(true);
+                          setProduct(product);
+                        }}
                       >
-                        <Link
-                          to="/dashboard/product/$productId"
-                          params={{
-                            productId: product.id,
-                          }}
-                        >
-                          <Info className="mr-2 h-4 w-4" />
-                          Details
-                        </Link>
+                        <Info className="mr-2 h-4 w-4" />
+                        Details
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="w-full justify-start text-muted-foreground"
-                        asChild
+                        onClick={() => {
+                          setOpenUpdate(true);
+                          setProduct(product);
+                        }}
                       >
-                        <Link
-                          to="/dashboard/update/$productId/"
-                          params={{
-                            productId: product.id,
-                          }}
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Update
-                        </Link>
+                        <Edit className="mr-2 h-4 w-4" />
+                        Update
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="w-full justify-start text-red-600"
@@ -130,10 +137,33 @@ function DashboardProduct() {
               </Card>
             </div>
           ))}
+          <Dialog open={openDetail} onOpenChange={setOpenDetail}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Detail product</DialogTitle>
+                <DialogDescription>
+                  information about the product
+                </DialogDescription>
+              </DialogHeader>
+              <ProductDetail product={product} />
+            </DialogContent>
+          </Dialog>
+          <Dialog open={openUpdate} onOpenChange={setOpenUpdate}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Update product</DialogTitle>
+                <DialogDescription>
+                  Provide a new information about the product
+                </DialogDescription>
+              </DialogHeader>
+              <ProductUpdateForm product={product} session={session} />
+            </DialogContent>
+          </Dialog>
         </div>
       ) : (
         <div className="font-bold text-2xl">No Items</div>
       )}
+      <Toaster />
     </div>
   );
 }

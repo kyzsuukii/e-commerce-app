@@ -1,11 +1,4 @@
 import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  Card,
-} from "@/components/ui/card";
-import {
   Form,
   FormControl,
   FormField,
@@ -36,7 +29,7 @@ export const formSchema = z
     {
       message: "Passwords do not match",
       path: ["confirmPassword"],
-    },
+    }
   );
 
 const Spinner = () => (
@@ -72,7 +65,7 @@ export default function ChangePasswordForm({ session }: { session: string }) {
           headers: {
             Authorization: `Bearer ${session}`,
           },
-        },
+        }
       );
     } catch (error: any) {
       if (error instanceof AxiosError) {
@@ -91,86 +84,66 @@ export default function ChangePasswordForm({ session }: { session: string }) {
   }
 
   return (
-    <Card className="mx-auto max-w-sm">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Change Password</CardTitle>
-        <CardDescription>Change your password</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <FormField
-                control={form.control}
-                name="oldPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Old Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="********"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <FormField
-                control={form.control}
-                name="newPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>New Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="********"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <FormField
-                control={form.control}
-                name="confirmNewPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm New Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="********"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="space-x-4">
-              <Button
-                disabled={loading}
-                type="submit"
-                className="disabled:opacity-75 disabled:cursor-not-allowed"
-              >
-                {loading ? <Spinner /> : "Update"}
-              </Button>
-              <Button variant="outline" asChild>
-                <Link to="/profile">Cancel</Link>
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="space-y-2">
+          <FormField
+            control={form.control}
+            name="oldPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Old Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="********" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <FormField
+            control={form.control}
+            name="newPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>New Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="********" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="space-y-2">
+          <FormField
+            control={form.control}
+            name="confirmNewPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm New Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="********" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="space-x-4">
+          <Button
+            disabled={loading}
+            type="submit"
+            className="disabled:opacity-75 disabled:cursor-not-allowed"
+          >
+            {loading ? <Spinner /> : "Update"}
+          </Button>
+          <Button variant="outline" asChild>
+            <Link to="/profile">Cancel</Link>
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

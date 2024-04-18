@@ -19,19 +19,15 @@ import { Route as AuthenticatedSearchImport } from './routes/_authenticated/sear
 import { Route as AuthenticatedProfileImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedProductsImport } from './routes/_authenticated/products'
 import { Route as AuthenticatedOrderImport } from './routes/_authenticated/order'
-import { Route as AuthenticatedChangePasswordImport } from './routes/_authenticated/change-password'
 import { Route as AuthenticatedCartImport } from './routes/_authenticated/cart'
 import { Route as AuthenticatedAboutImport } from './routes/_authenticated/about'
 import { Route as AuthRegisterImport } from './routes/_auth/register'
 import { Route as AuthLoginImport } from './routes/_auth/login'
 import { Route as AuthenticatedProductProductIdImport } from './routes/_authenticated/product.$productId'
-import { Route as AuthenticatedCategoryCategoryNameImport } from './routes/_authenticated/category.$categoryName'
 import { Route as AdminDashboardUsersImport } from './routes/_admin/dashboard/users'
 import { Route as AdminDashboardUploadImport } from './routes/_admin/dashboard/upload'
 import { Route as AdminDashboardProductsImport } from './routes/_admin/dashboard/products'
 import { Route as AdminDashboardOrdersImport } from './routes/_admin/dashboard/orders'
-import { Route as AdminDashboardUpdateProductIdImport } from './routes/_admin/dashboard/update.$productId'
-import { Route as AdminDashboardProductProductIdImport } from './routes/_admin/dashboard/product.$productId'
 
 // Create/Update Routes
 
@@ -75,12 +71,6 @@ const AuthenticatedOrderRoute = AuthenticatedOrderImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const AuthenticatedChangePasswordRoute =
-  AuthenticatedChangePasswordImport.update({
-    path: '/change-password',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-
 const AuthenticatedCartRoute = AuthenticatedCartImport.update({
   path: '/cart',
   getParentRoute: () => AuthenticatedRoute,
@@ -107,12 +97,6 @@ const AuthenticatedProductProductIdRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
-const AuthenticatedCategoryCategoryNameRoute =
-  AuthenticatedCategoryCategoryNameImport.update({
-    path: '/category/$categoryName',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-
 const AdminDashboardUsersRoute = AdminDashboardUsersImport.update({
   path: '/dashboard/users',
   getParentRoute: () => AdminRoute,
@@ -132,18 +116,6 @@ const AdminDashboardOrdersRoute = AdminDashboardOrdersImport.update({
   path: '/dashboard/orders',
   getParentRoute: () => AdminRoute,
 } as any)
-
-const AdminDashboardUpdateProductIdRoute =
-  AdminDashboardUpdateProductIdImport.update({
-    path: '/dashboard/update/$productId',
-    getParentRoute: () => AdminRoute,
-  } as any)
-
-const AdminDashboardProductProductIdRoute =
-  AdminDashboardProductProductIdImport.update({
-    path: '/dashboard/product/$productId',
-    getParentRoute: () => AdminRoute,
-  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -175,10 +147,6 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/cart': {
       preLoaderRoute: typeof AuthenticatedCartImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/change-password': {
-      preLoaderRoute: typeof AuthenticatedChangePasswordImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/order': {
@@ -217,21 +185,9 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardUsersImport
       parentRoute: typeof AdminImport
     }
-    '/_authenticated/category/$categoryName': {
-      preLoaderRoute: typeof AuthenticatedCategoryCategoryNameImport
-      parentRoute: typeof AuthenticatedImport
-    }
     '/_authenticated/product/$productId': {
       preLoaderRoute: typeof AuthenticatedProductProductIdImport
       parentRoute: typeof AuthenticatedImport
-    }
-    '/_admin/dashboard/product/$productId': {
-      preLoaderRoute: typeof AdminDashboardProductProductIdImport
-      parentRoute: typeof AdminImport
-    }
-    '/_admin/dashboard/update/$productId': {
-      preLoaderRoute: typeof AdminDashboardUpdateProductIdImport
-      parentRoute: typeof AdminImport
     }
   }
 }
@@ -244,20 +200,16 @@ export const routeTree = rootRoute.addChildren([
     AdminDashboardProductsRoute,
     AdminDashboardUploadRoute,
     AdminDashboardUsersRoute,
-    AdminDashboardProductProductIdRoute,
-    AdminDashboardUpdateProductIdRoute,
   ]),
   AuthRoute.addChildren([AuthLoginRoute, AuthRegisterRoute]),
   AuthenticatedRoute.addChildren([
     AuthenticatedAboutRoute,
     AuthenticatedCartRoute,
-    AuthenticatedChangePasswordRoute,
     AuthenticatedOrderRoute,
     AuthenticatedProductsRoute,
     AuthenticatedProfileRoute,
     AuthenticatedSearchRoute,
     AuthenticatedIndexRoute,
-    AuthenticatedCategoryCategoryNameRoute,
     AuthenticatedProductProductIdRoute,
   ]),
 ])

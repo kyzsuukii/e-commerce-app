@@ -65,7 +65,7 @@ async function updateStatus(orderId: number, orderStatus: string) {
       },
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("session")}`,
+          Authorization: `Bearer ${config.SESSION}`,
         },
       }
     );
@@ -99,7 +99,7 @@ async function deleteOrder(orderId: number) {
           orderId,
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("session")}`,
+          Authorization: `Bearer ${config.SESSION}`,
         },
       }
     );

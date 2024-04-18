@@ -1,11 +1,4 @@
 import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  Card,
-} from "@/components/ui/card";
-import {
   Form,
   FormControl,
   FormField,
@@ -79,10 +72,10 @@ const Spinner = () => (
 );
 
 export default function ProductUpdateForm({
-  data,
+  product,
   session,
 }: {
-  data: any;
+  product: any;
   session: string;
 }) {
   const { trigger, isMutating } = useSWRMutation(
@@ -93,12 +86,12 @@ export default function ProductUpdateForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id: data?.id,
-      name: data?.name,
-      category: data?.category,
-      price: `${data?.price}`,
-      stock: `${data?.stock}`,
-      description: data?.description,
+      id: product?.id,
+      name: product?.name,
+      category: product?.category,
+      price: `${product?.price}`,
+      stock: `${product?.stock}`,
+      description: product?.description,
     },
   });
 
@@ -107,127 +100,115 @@ export default function ProductUpdateForm({
   }
 
   return (
-    <Card className="mx-auto max-w-xl">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Upload Product</CardTitle>
-        <CardDescription>
-          Upload your product to the database here.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form
-            encType="multipart/form-data"
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-1 gap-6"
-          >
-            <div className="flex flex-col gap-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Product title" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Categories</SelectLabel>
-                          <SelectItem value="smartphones">
-                            smartphones
-                          </SelectItem>
-                          <SelectItem value="laptops">laptops</SelectItem>
-                          <SelectItem value="furniture">furniture</SelectItem>
-                          <SelectItem value="groceries">groceries</SelectItem>
-                          <SelectItem value="shirts">shirts</SelectItem>
-                          <SelectItem value="others">others</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Price</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Product price"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="stock"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Stock</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Product stock"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea placeholder="Product description" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <Button
-              disabled={isMutating}
-              type="submit"
-              className="w-full md:w-auto disabled:opacity-75 disabled:cursor-not-allowed"
-            >
-              {isMutating ? <Spinner /> : "Update"}
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+    <Form {...form}>
+      <form
+        encType="multipart/form-product"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="grid grid-cols-1 gap-6"
+      >
+        <div className="flex flex-col gap-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Product title" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Categories</SelectLabel>
+                      <SelectItem value="smartphones">smartphones</SelectItem>
+                      <SelectItem value="laptops">laptops</SelectItem>
+                      <SelectItem value="furniture">furniture</SelectItem>
+                      <SelectItem value="groceries">groceries</SelectItem>
+                      <SelectItem value="shirts">shirts</SelectItem>
+                      <SelectItem value="others">others</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Product price"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="stock"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Stock</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Product stock"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Product description" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <Button
+          disabled={isMutating}
+          type="submit"
+          className="w-full md:w-auto disabled:opacity-75 disabled:cursor-not-allowed"
+        >
+          {isMutating ? <Spinner /> : "Update"}
+        </Button>
+      </form>
+    </Form>
   );
 }

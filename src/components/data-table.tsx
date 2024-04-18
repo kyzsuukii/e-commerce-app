@@ -99,7 +99,7 @@ async function deleteUser(id: number) {
           id,
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("session")}`,
+          Authorization: `Bearer ${config.SESSION}`,
         },
       }
     );
@@ -150,6 +150,13 @@ const columns: ColumnDef<any>[] = [
     header: () => "Role",
     cell: ({ row }) => {
       return <Badge>{row.getValue("role")}</Badge>;
+    },
+  },
+  {
+    accessorKey: "address",
+    header: () => "Address",
+    cell: ({ row }) => {
+      return <div>{row.getValue("address") || "No address"}</div>;
     },
   },
   {

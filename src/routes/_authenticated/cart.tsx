@@ -4,7 +4,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { config } from "@/lib/config";
 import { createFileRoute } from "@tanstack/react-router";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
 import { FaDollarSign } from "react-icons/fa6";
 import { FiMinus, FiPlus, FiTrash } from "react-icons/fi";
 import { useCart } from "react-use-cart";
@@ -15,33 +14,6 @@ export const Route = createFileRoute("/_authenticated/cart")({
   component: Cart,
 });
 
-async function createOrder([url, session]: any, { arg }: { arg: any }) {
-  try {
-    const { data, status } = await axios.post(
-      `${config.SERVER_API_URL}/v1/${url}`,
-      arg,
-      {
-        headers: {
-          Authorization: `Bearer ${session}`,
-        },
-      }
-    );
-    if (status === 200) {
-      return toast.success(data.msg);
-    }
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      if (error.response?.status == 401) {
-        localStorage.clear();
-        window.location.reload();
-      }
-      return toast.error(error.response?.data.errors[0].msg);
-    } else {
-      return toast.error("An unexpected error occurred");
-    }
-  }
-}
-
 const Spinner = () => (
   <div className="border-background h-5 w-5 animate-spin rounded-full border-2 border-t-blue-600" />
 );
@@ -51,18 +23,35 @@ function Cart() {
 
   const { isEmpty, items, updateItemQuantity, removeItem } = useCart();
 
-  const { trigger, isMutating } = useSWRMutation(
-    ["order/create", session],
-    createOrder
-  );
+  async function createOrder([url]: string[], { arg }: { arg: any }) {
+    try {
+      const { data, status } = await axios.post(
+        `${config.SERVER_API_URL}/v1/${url}`,
+        arg,
+        {
+          headers: {
+            Authorization: `Bearer ${session}`,
+          },
+        }
+      );
+      if (status === 200) {
+        items.forEach((item) => removeItem(item.id));
+        return toast.success(data.msg);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status == 401) {
+          localStorage.clear();
+          window.location.reload();
+        }
+        return toast.error(error.response?.data.errors[0].msg);
+      } else {
+        return toast.error("An unexpected error occurred");
+      }
+    }
+  }
 
-  const [showAddressInput, setShowAddressInput] = useState(false);
-  const [address, setAddress] = useState(localStorage.getItem("address") || "");
-
-  const handleSaveAddress = () => {
-    address && localStorage.setItem("address", address);
-    setShowAddressInput(false);
-  };
+  const { trigger, isMutating } = useSWRMutation(["order/create"], createOrder);
 
   const totalPrice = items.reduce((acc, item) => {
     return (
@@ -73,52 +62,18 @@ function Cart() {
     );
   }, 0);
 
-  function handleCheckout(
-    totalAmount: number,
-    address: string,
-    items: any[]
-  ): void {
-    trigger({ totalAmount, address, items });
+  function handleCheckout(totalAmount: number, items: any[]): void {
+    trigger({ totalAmount, items });
   }
 
   return (
     <div className="my-12 container mx-auto">
       {!isEmpty ? (
         <>
-          <div className="mb-4">
-            <div className="text-xl font-bold mb-4">shipping address</div>
-            {showAddressInput ? (
-              <div className="flex items-center space-x-4">
-                <Input
-                  type="text"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Enter your address"
-                />
-                <Button variant="outline" onClick={handleSaveAddress}>
-                  Save
-                </Button>
-              </div>
-            ) : (
-              <div className="flex justify-between items-center">
-                <span className="text-primary/50">
-                  {address || "shipping address not set"}
-                </span>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setShowAddressInput(true)}
-                >
-                  {address ? "Edit Address" : "Add Address"}
-                </Button>
-              </div>
-            )}
-          </div>
           <Button
             disabled={isMutating}
             className="w-full md:w-auto disabled:opacity-75 disabled:cursor-not-allowed"
-            variant="outline"
-            onClick={() => handleCheckout(totalPrice, address, items)}
+            onClick={() => handleCheckout(totalPrice, items)}
           >
             {isMutating ? <Spinner /> : "Checkout"}
           </Button>

@@ -9,22 +9,22 @@ export const Route = createFileRoute("/_authenticated/product/$productId")({
   component: ProductDetail,
 });
 
-async function getProductDetails(url: string, session: string) {
-  const { data } = await axios.get(`${config.SERVER_API_URL}/v1/${url}`, {
-    headers: {
-      Authorization: `Bearer ${session}`,
-    },
-  });
-  return data;
-}
-
 function ProductDetail() {
   const { productId } = Route.useParams();
   const { session } = Route.useRouteContext();
 
+  async function getProductDetails([url]: string[]) {
+    const { data } = await axios.get(`${config.SERVER_API_URL}/v1/${url}`, {
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
+    });
+    return data;
+  }
+
   const { data, isLoading } = useSWR(
-    ["product/get/" + productId, session],
-    ([url, session]) => getProductDetails(url, session)
+    ["product/get/" + productId],
+    getProductDetails
   );
 
   if (isLoading) return <Loading />;

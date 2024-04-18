@@ -13,24 +13,21 @@ export const Route = createFileRoute("/_authenticated/search")({
   pendingComponent: Loading,
 });
 
-async function searchProduct(url: string, session: string) {
-  const { data } = await axios.get(`${config.SERVER_API_URL}/v1/${url}`, {
-    headers: {
-      Authorization: `Bearer ${session}`,
-    },
-  });
-  return data;
-}
-
 function Search() {
   const { session } = Route.useRouteContext();
   const [query, setQuery] = useState<string>("");
   const q = useDebounce(query, 500);
 
-  const { isLoading, data } = useSWR(
-    [`product/search?q=${q}`, session],
-    ([url, session]) => searchProduct(url, session)
-  );
+  async function searchProduct([url]: string[]) {
+    const { data } = await axios.get(`${config.SERVER_API_URL}/v1/${url}`, {
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
+    });
+    return data;
+  }
+
+  const { isLoading, data } = useSWR(["product/search?q=" + q], searchProduct);
 
   return (
     <div className="mt-12 container px-4 mx-auto">
